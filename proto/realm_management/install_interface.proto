@@ -1,0 +1,3 @@
+message InstallInterface {
+    string interface_json = 1;
+}
