@@ -1,0 +1,10 @@
+message Call {
+    int32 version = 1;
+
+    optional ReplyHeader reply_header = 3;
+
+    oneof call {
+        InstallInterface install_interface = 2;
+    }
+}
+
