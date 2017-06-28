@@ -28,6 +28,11 @@ defmodule AstarteRpc.Mixfile do
   #
   # Type "mix help deps" for more examples and options
   defp deps do
-    []
+    [
+      {:exprotobuf, "~> 1.2.7"},
+      {:distillery, "~> 1.4", runtime: false},
+
+      {:excoveralls, "~> 0.6", only: :test}
+    ]
   end
 end
