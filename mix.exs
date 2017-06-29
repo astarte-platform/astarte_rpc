@@ -1,4 +1,4 @@
-defmodule AstarteRpc.Mixfile do
+defmodule Astarte.RPC.Mixfile do
   use Mix.Project
 
   def project do

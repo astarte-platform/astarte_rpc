@@ -1,4 +1,4 @@
-defmodule HousekeepingTest do
+defmodule Astarte.RPC.Protocol.HousekeepingTest do
   use ExUnit.Case
 
   test "Housekeeping Protobuf round trip" do
