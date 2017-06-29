@@ -1,3 +1,4 @@
 message InstallInterface {
-    string interface_json = 1;
+    string realm_name = 1;
+    string interface_json = 2;
 }
