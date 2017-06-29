@@ -1,4 +1,4 @@
-defmodule RealmManagementTest do
+defmodule Astarte.RPC.Protocol.RealmManagementTest do
   use ExUnit.Case
 
   @test_interface_json """
