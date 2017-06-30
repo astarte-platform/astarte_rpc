@@ -5,6 +5,7 @@ defmodule Astarte.RPC.AMQPServer do
     target_module = __CALLER__.module
 
     queue = Keyword.fetch!(opts, :queue)
+    amqp_options = Keyword.get(opts, :amqp_options, [])
 
     quote do
       require Logger
@@ -24,8 +25,7 @@ defmodule Astarte.RPC.AMQPServer do
       end
 
       defp rabbitmq_connect(retry \\ true) do
-        options = []
-        with {:ok, conn} <- AMQP.Connection.open(options),
+        with {:ok, conn} <- AMQP.Connection.open(unquote(amqp_options)),
         # Get notifications when the connection goes down
         Process.monitor(conn.pid),
         {:ok, chan} <- AMQP.Channel.open(conn),
