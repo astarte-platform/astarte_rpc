@@ -1,4 +1,6 @@
 defmodule Astarte.RPC.AMQPServer do
+  @callback process_rpc(payload :: binary) :: {:ok, reply :: term} | {:error, reason :: term}
+
   require Logger
   use GenServer
   use AMQP
