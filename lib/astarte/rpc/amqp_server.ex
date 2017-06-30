@@ -4,6 +4,8 @@ defmodule Astarte.RPC.AMQPServer do
   @callback process_rpc(payload :: binary) :: :ok | {:ok, reply :: term} | {:error, reason :: term}
 
   defmacro __using__(_opts) do
+    target_module = __CALLER__.module
+
     quote do
       require Logger
       use GenServer
@@ -83,7 +85,7 @@ defmodule Astarte.RPC.AMQPServer do
       end
 
       defp consume(chan, payload, meta) do
-        case IO.puts(payload)) do
+        case apply(unquote(target_module), :process_rpc, [payload]) do
           :ok ->
             Basic.ack(chan, meta.delivery_tag)
 
