@@ -64,9 +64,9 @@ defmodule Astarte.RPC.AMQPServer do
     {:noreply, chan}
   end
 
-  def handle_info({:basic_deliver, payload, %{delivery_tag: tag, redelivered: redelivered}}, chan) do
+  def handle_info({:basic_deliver, payload, meta}, chan) do
     # We process the message asynchronously
-    spawn_link fn -> consume(chan, tag, redelivered, payload) end
+    spawn_link fn -> consume(chan, meta, payload) end
     {:noreply, chan}
   end
 
@@ -76,12 +76,12 @@ defmodule Astarte.RPC.AMQPServer do
     {:noreply, new_chan}
   end
 
-  defp consume(chan, tag, redelivered, payload) do
+  defp consume(chan, meta, payload) do
     case IO.puts(inspect(payload)) do
       :ok -> Basic.ack(chan, tag)
       # We don't want to keep failing on the same message
       {:error, reason} ->
-        Basic.reject(chan, tag, [requeue: not redelivered])
+        Basic.reject(chan, meta.delivery_tag, [requeue: not meta.redelivered])
         # TODO: we want to be notified in some other way of failing messages
         Logger.warn("Message rejected with reason #{inspect(reason)}")
     end
