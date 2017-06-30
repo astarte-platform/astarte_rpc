@@ -1,6 +1,4 @@
 defmodule Astarte.RPC.AMQPServer do
-  use AMQP
-
   @callback process_rpc(payload :: binary) :: :ok | {:ok, reply :: term} | {:error, reason :: term}
 
   defmacro __using__(opts) do
@@ -27,11 +25,11 @@ defmodule Astarte.RPC.AMQPServer do
 
       defp rabbitmq_connect(retry \\ true) do
         options = []
-        with {:ok, conn} <- Connection.open(options),
+        with {:ok, conn} <- AMQP.Connection.open(options),
         # Get notifications when the connection goes down
         Process.monitor(conn.pid),
-        {:ok, chan} <- Channel.open(conn),
-        {:ok, _consumer_tag} <- Basic.consume(chan, @queue) do
+        {:ok, chan} <- AMQP.Channel.open(conn),
+        {:ok, _consumer_tag} <- AMQP.Basic.consume(chan, @queue) do
           {:ok, chan}
 
         else
@@ -86,27 +84,27 @@ defmodule Astarte.RPC.AMQPServer do
         try do
           case apply(unquote(target_module), :process_rpc, [payload]) do
             :ok ->
-              Basic.ack(chan, meta.delivery_tag)
+              AMQP.Basic.ack(chan, meta.delivery_tag)
 
             {:ok, reply} ->
-              Basic.ack(chan, meta.delivery_tag)
+              AMQP.Basic.ack(chan, meta.delivery_tag)
               case meta.reply_to do
                 :undefined ->
                   Logger.warn("Got a reply but no queue to write it to")
 
                 routing_key ->
-                  Basic.publish(chan, "", routing_key, reply, [correlation_id: meta.correlation_id])
+                  AMQP.Basic.publish(chan, "", routing_key, reply, [correlation_id: meta.correlation_id])
               end
 
             # We don't want to keep failing on the same message
             {:error, reason} ->
-              Basic.reject(chan, meta.delivery_tag, [requeue: not meta.redelivered])
+              AMQP.Basic.reject(chan, meta.delivery_tag, [requeue: not meta.redelivered])
               # TODO: we want to be notified in some other way of failing messages
               Logger.warn("Message rejected with reason #{inspect(reason)}")
           end
         rescue
           e ->
-            Basic.reject(chan, meta.delivery_tag, [requeue: false])
+            AMQP.Basic.reject(chan, meta.delivery_tag, [requeue: false])
             Logger.warn("Exception while handling message: #{inspect(e)}\nRejecting it")
         end
       end
