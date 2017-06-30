@@ -1,4 +1,45 @@
 defmodule Astarte.RPC.AMQPServer do
+  @moduledoc """
+  Behaviour module to implement an AMQP server replying to Astarte
+  RPC calls.
+
+  ## Example
+
+  Define a module implementing the `process_rpc` callback and using the
+  `use` macro to implement your AMQP RPC Server
+
+    defmodule MyRPCServer do
+      use Astarte.RPC.AMQPServer, queue: "my_rpc_queue"
+      alias Astarte.RPC.Protocol.MyModule, as: MyRPC
+
+      def process_rpc(payload)
+        with %MyRPC.Call{call: call_tuple} <- MyRPC.Call.decode(payload),
+             {:my_rpc_call, %{MyRPC.MyRPCCall{arg: arg, other: other}} <- call_tuple do:
+               do_my_rpc_call(arg, other)
+        else
+          {:error, :invalid_call}
+      end
+    end
+
+  It is also possible to pass `amqp_options` to the `use` macro
+  """
+
+  @doc """
+  Invoked when an AMQP message is received in the configured queue.
+
+  `payload` is the serialized RPC call.
+
+  Returning `:ok` will ACK the message and send no reply to the client.
+
+  Returning `{:ok, reply}` will ACK the message and try to send a reply
+  to the client, if the necessary AMQP metadata is set.
+
+  Returning `{:error, reason}` will reject the message. The first time the
+  message will be re-enqueued, the second time it won't.
+
+  If an exception is thrown in this function, the message is rejected and
+  not re-enqueued.
+  """
   @callback process_rpc(payload :: binary) ::
     :ok |
     {:ok, reply :: term} |
