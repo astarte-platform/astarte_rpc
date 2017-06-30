@@ -66,7 +66,7 @@ defmodule Astarte.RPC.AMQPServer do
 
   def handle_info({:basic_deliver, payload, meta}, chan) do
     # We process the message asynchronously
-    spawn_link fn -> consume(chan, meta, payload) end
+    spawn_link fn -> consume(chan, payload, meta) end
     {:noreply, chan}
   end
 
@@ -76,7 +76,7 @@ defmodule Astarte.RPC.AMQPServer do
     {:noreply, new_chan}
   end
 
-  defp consume(chan, meta, payload) do
+  defp consume(chan, payload, meta) do
     case IO.puts(inspect(payload)) do
       :ok ->
         Basic.ack(chan, meta.delivery_tag)
