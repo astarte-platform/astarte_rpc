@@ -70,10 +70,11 @@ defmodule Astarte.RPC.AMQPServer do
 
       defp rabbitmq_connect(retry \\ true) do
         with {:ok, conn} <- AMQP.Connection.open(unquote(amqp_options)),
-        # Get notifications when the connection goes down
-        Process.monitor(conn.pid),
-        {:ok, chan} <- AMQP.Channel.open(conn),
-        {:ok, _consumer_tag} <- AMQP.Basic.consume(chan, @queue) do
+             # Get notifications when the connection goes down
+             Process.monitor(conn.pid),
+             {:ok, chan} <- AMQP.Channel.open(conn),
+             {:ok, _consumer_tag} <- AMQP.Basic.consume(chan, @queue) do
+
           {:ok, chan}
 
         else
