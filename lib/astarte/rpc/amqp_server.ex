@@ -11,7 +11,6 @@ defmodule Astarte.RPC.AMQPServer do
     quote do
       require Logger
       use GenServer
-      use AMQP
 
       @behaviour Astarte.RPC.AMQPServer
 
