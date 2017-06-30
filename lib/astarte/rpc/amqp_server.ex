@@ -22,10 +22,6 @@ defmodule Astarte.RPC.AMQPServer do
     rabbitmq_connect(state, false)
   end
 
-  def publish(pid, exchange, routing_key, payload, options \\ []) do
-    GenServer.call(pid, {:publish, exchange, routing_key, payload, options})
-  end
-
   defp rabbitmq_connect(state, retry \\ true) do
     with {:ok, options} <- Map.fetch(state, :amqp_opts),
          {:ok, conn} <- Connection.open(options),
@@ -59,11 +55,6 @@ defmodule Astarte.RPC.AMQPServer do
   end
 
   # Server callbacks
-
-  def handle_call({:publish, exchange, routing_key, payload, options}, _from, state) do
-    Basic.publish(Map.get(state, :chan), exchange, routing_key, payload, options)
-    {:reply, :ok, state}
-  end
 
   # Confirmation sent by the broker after registering this process as a consumer
   def handle_info({:basic_consume_ok, %{consumer_tag: _consumer_tag}}, state) do
