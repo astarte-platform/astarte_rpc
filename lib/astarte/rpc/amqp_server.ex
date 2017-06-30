@@ -78,7 +78,19 @@ defmodule Astarte.RPC.AMQPServer do
 
   defp consume(chan, meta, payload) do
     case IO.puts(inspect(payload)) do
-      :ok -> Basic.ack(chan, tag)
+      :ok ->
+        Basic.ack(chan, meta.delivery_tag)
+
+      {:ok, reply} ->
+        Basic.ack(chan, meta.delivery_tag)
+        case meta.reply_to do
+          :undefined ->
+            Logger.warn("Got a reply but no queue to write it to")
+
+          routing_key ->
+            Basic.publish(chan, "", routing_key, reply, [correlation_id: meta.correlation_id])
+        end
+
       # We don't want to keep failing on the same message
       {:error, reason} ->
         Basic.reject(chan, meta.delivery_tag, [requeue: not meta.redelivered])
