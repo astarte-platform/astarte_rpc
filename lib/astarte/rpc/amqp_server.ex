@@ -3,8 +3,10 @@ defmodule Astarte.RPC.AMQPServer do
 
   @callback process_rpc(payload :: binary) :: :ok | {:ok, reply :: term} | {:error, reason :: term}
 
-  defmacro __using__(_opts) do
+  defmacro __using__(opts) do
     target_module = __CALLER__.module
+
+    queue = Keyword.fetch!(opts, :queue)
 
     quote do
       require Logger
@@ -14,7 +16,7 @@ defmodule Astarte.RPC.AMQPServer do
       @behaviour Astarte.RPC.AMQPServer
 
       @connection_backoff 10000
-      @queue "rpc_queue"
+      @queue unquote(queue)
 
       def start_link do
         GenServer.start_link(__MODULE__, [])
