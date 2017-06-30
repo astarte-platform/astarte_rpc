@@ -1,5 +1,8 @@
 defmodule Astarte.RPC.AMQPServer do
-  @callback process_rpc(payload :: binary) :: :ok | {:ok, reply :: term} | {:error, reason :: term}
+  @callback process_rpc(payload :: binary) ::
+    :ok |
+    {:ok, reply :: term} |
+    {:error, reason :: term}
 
   defmacro __using__(opts) do
     target_module = __CALLER__.module
