@@ -142,9 +142,12 @@ defmodule Astarte.RPC.AMQPServer do
                   AMQP.Basic.publish(chan, "", routing_key, reply, [correlation_id: meta.correlation_id])
               end
 
-            # We don't want to keep failing on the same message
+            {:error, :retry} ->
+              AMQP.Basic.reject(chan, meta.delivery_tag, [requeue: true])
+              Logger.warn("Temporary error, re-enqueing the message")
+
             {:error, reason} ->
-              AMQP.Basic.reject(chan, meta.delivery_tag, [requeue: not meta.redelivered])
+              AMQP.Basic.reject(chan, meta.delivery_tag, [requeue: false])
               # TODO: we want to be notified in some other way of failing messages
               Logger.warn("Message rejected with reason #{inspect(reason)}")
           end
