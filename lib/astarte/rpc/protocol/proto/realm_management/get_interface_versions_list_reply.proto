@@ -1,0 +1,8 @@
+message GetInterfaceVersionsListReplyVersionTuple {
+    int32 major_version = 1;
+    int32 minor_version = 2;
+}
+
+message GetInterfaceVersionsListReply {
+   repeated GetInterfaceVersionsListReplyVersionTuple versions = 1;
+}
