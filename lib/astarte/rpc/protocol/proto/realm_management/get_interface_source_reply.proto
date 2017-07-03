@@ -1,0 +1,3 @@
+message GetInterfaceSourceReply {
+    string source = 1;
+}
