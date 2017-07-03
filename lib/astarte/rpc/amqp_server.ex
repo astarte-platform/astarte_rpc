@@ -14,8 +14,9 @@ defmodule Astarte.RPC.AMQPServer do
 
       def process_rpc(payload)
         with %MyRPC.Call{call: call_tuple} <- MyRPC.Call.decode(payload),
-             {:my_rpc_call, %{MyRPC.MyRPCCall{arg: arg, other: other}} <- call_tuple do:
-               do_my_rpc_call(arg, other)
+             {:my_rpc_call, %{MyRPC.MyRPCCall{arg: arg, other: other}} <- call_tuple do
+
+          do_my_rpc_call(arg, other)
         else
           {:error, :invalid_call}
       end
@@ -34,8 +35,11 @@ defmodule Astarte.RPC.AMQPServer do
   Returning `{:ok, reply}` will ACK the message and try to send a reply
   to the client, if the necessary AMQP metadata is set.
 
-  Returning `{:error, reason}` will reject the message. The first time the
-  message will be re-enqueued, the second time it won't.
+  Returning `{:error, :retry}` will reject the message, re-enqueuing it for
+  a later retry.
+
+  Returning `{:error, reason}` will reject the message effectively dropping
+  it.
 
   If an exception is thrown in this function, the message is rejected and
   not re-enqueued.
