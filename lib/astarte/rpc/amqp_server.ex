@@ -154,7 +154,7 @@ defmodule Astarte.RPC.AMQPServer do
         rescue
           e ->
             AMQP.Basic.reject(chan, meta.delivery_tag, [requeue: false])
-            Logger.warn("Exception while handling message: #{inspect(e)}\nRejecting it")
+            Logger.warn("Exception while handling message: #{inspect(e)}. Rejecting it")
         end
       end
 
