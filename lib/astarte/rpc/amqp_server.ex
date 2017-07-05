@@ -131,35 +131,64 @@ defmodule Astarte.RPC.AMQPServer do
       end
 
       defp consume(chan, payload, meta) do
+        apply_process_rpc(payload)
+        |> ack_or_reject(chan, meta.delivery_tag)
+        |> maybe_reply(chan, meta.reply_to, meta.correlation_id)
+      end
+
+
+      defp apply_process_rpc(payload) do
         try do
-          case apply(unquote(target_module), :process_rpc, [payload]) do
-            :ok ->
-              AMQP.Basic.ack(chan, meta.delivery_tag)
-
-            {:ok, reply} ->
-              AMQP.Basic.ack(chan, meta.delivery_tag)
-              case meta.reply_to do
-                :undefined ->
-                  Logger.warn("Got a reply but no queue to write it to")
-
-                routing_key ->
-                  AMQP.Basic.publish(chan, "", routing_key, reply, [correlation_id: meta.correlation_id])
-              end
-
-            {:error, :retry} ->
-              AMQP.Basic.reject(chan, meta.delivery_tag, [requeue: true])
-              Logger.warn("Temporary error, re-enqueing the message")
-
-            {:error, reason} ->
-              AMQP.Basic.reject(chan, meta.delivery_tag, [requeue: false])
-              # TODO: we want to be notified in some other way of failing messages
-              Logger.warn("Message rejected with reason #{inspect(reason)}")
-          end
+          apply(unquote(target_module), :process_rpc, [payload])
         rescue
           e ->
-            AMQP.Basic.reject(chan, meta.delivery_tag, [requeue: false])
-            Logger.warn("Exception while handling message: #{inspect(e)}. Rejecting it")
+            Logger.warn("Exception while handling message: #{inspect(e)}")
+            {:error, :exception}
         end
+      end
+
+
+      defp ack_or_reject(result = :ok, chan, delivery_tag) do
+        AMQP.Basic.ack(chan, delivery_tag)
+        result
+      end
+
+      defp ack_or_reject(result = {:ok, reply}, chan, delivery_tag) do
+        AMQP.Basic.ack(chan, delivery_tag)
+        result
+      end
+
+      defp ack_or_reject(result = {:error, :retry} chan, delivery_tag) do
+        AMQP.Basic.reject(chan, delivery_tag, [requeue: true])
+        Logger.warn("Temporary error, re-enqueing the message")
+        result
+      end
+
+      defp ack_or_reject(result = {:error, reason} chan, delivery_tag) do
+        AMQP.Basic.reject(chan, delivery_tag, [requeue: false])
+        Logger.warn("Message rejected with reason #{inspect(reason)}")
+        result
+      end
+
+
+      defp maybe_reply({status, _reply}, _chan, :undefined, _correlation_id) do
+        Logger.warn("Got a reply but no queue to write it to")
+      end
+
+      defp maybe_reply({:ok, reply}, chan, reply_to, correlation_id) do
+        AMQP.Basic.publish(chan, "", reply_to, reply, [correlation_id: correlation_id])
+      end
+
+      defp maybe_reply({:error, reason}, chan, reply_to, correlation_id) when is_binary(reason) do
+        AMQP.Basic.publish(chan, "", reply_to, reason, [correlation_id: correlation_id])
+      end
+
+      defp maybe_reply({:error, reason}, chan, reply_to, correlation_id) when is_atom(reason) do
+        AMQP.Basic.publish(chan, "", reply_to, to_string(reason), [correlation_id: correlation_id])
+      end
+
+      defp maybe_reply(_result, _chan, _reply_to, _correlation_id) do
+        :ok
       end
 
     end # quote
