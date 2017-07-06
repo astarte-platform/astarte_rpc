@@ -158,13 +158,13 @@ defmodule Astarte.RPC.AMQPServer do
         result
       end
 
-      defp ack_or_reject(result = {:error, :retry} chan, delivery_tag) do
+      defp ack_or_reject(result = {:error, :retry}, chan, delivery_tag) do
         AMQP.Basic.reject(chan, delivery_tag, [requeue: true])
         Logger.warn("Temporary error, re-enqueing the message")
         result
       end
 
-      defp ack_or_reject(result = {:error, reason} chan, delivery_tag) do
+      defp ack_or_reject(result = {:error, reason}, chan, delivery_tag) do
         AMQP.Basic.reject(chan, delivery_tag, [requeue: false])
         Logger.warn("Message rejected with reason #{inspect(reason)}")
         result
