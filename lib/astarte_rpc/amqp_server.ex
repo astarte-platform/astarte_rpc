@@ -132,6 +132,7 @@ defmodule Astarte.RPC.AMQPServer do
 
       # This callback should try to reconnect to the server
       def handle_info({:DOWN, _, :process, _pid, _reason}, _chan) do
+        Logger.warn("RabbitMQ connection lost. Trying to reconnect...")
         {:ok, new_chan} = rabbitmq_connect()
         {:noreply, new_chan}
       end
