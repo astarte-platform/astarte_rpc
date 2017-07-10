@@ -94,14 +94,20 @@ defmodule Astarte.RPC.AMQPServer do
 
       defp maybe_retry(retry) do
         if retry do
-          :timer.sleep(@connection_backoff)
-          rabbitmq_connect(retry)
+          Logger.warn("Retrying connection in #{@connection_backoff} ms")
+          :erlang.send_after(@connection_backoff, :erlang.self(), {:try_to_connect})
+          {:ok, :not_connected}
         else
-          {:ok, nil}
+          {:stop, :connection_failed}
         end
       end
 
       # Server callbacks
+
+      def handle_info({:try_to_connect}, chan) do
+        {:ok, new_chan} = rabbitmq_connect()
+        {:noreply, new_chan}
+      end
 
       # Confirmation sent by the broker after registering this process as a consumer
       def handle_info({:basic_consume_ok, %{consumer_tag: _consumer_tag}}, chan) do
@@ -126,6 +132,7 @@ defmodule Astarte.RPC.AMQPServer do
 
       # This callback should try to reconnect to the server
       def handle_info({:DOWN, _, :process, _pid, _reason}, _chan) do
+        Logger.warn("RabbitMQ connection lost. Trying to reconnect...")
         {:ok, new_chan} = rabbitmq_connect()
         {:noreply, new_chan}
       end
