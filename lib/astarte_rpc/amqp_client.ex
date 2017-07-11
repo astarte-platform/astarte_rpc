@@ -94,13 +94,23 @@ defmodule Astarte.RPC.AMQPClient do
       end
 
       def handle_info({:basic_deliver, ser_reply, %{correlation_id: deliver_correlation_id}}, %{pending_reqs: pending} = state) do
-        caller_pid = Map.get(pending, deliver_correlation_id)
-        if caller_pid do
-          GenServer.reply(caller_pid, ser_reply)
-        end
+        Map.get(pending, deliver_correlation_id)
+        |> maybe_reply(ser_reply)
+
         {:noreply, %{state | pending_reqs: Map.delete(pending, deliver_correlation_id)}}
       end
 
+      def maybe_reply(nil, _reply) do
+        :ok
+      end
+
+      def maybe_reply(caller, "error:" <> reply) do
+        GenServer.reply(caller, {:error, reply})
+      end
+
+      def maybe_reply(caller, ok_reply) do
+        GenServer.reply(caller, {:ok, ok_reply})
+      end
 
       def handle_call({:rpc, ser_payload}, from, state) when is_binary(ser_payload) do
         %{channel: chan,
