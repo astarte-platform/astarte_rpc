@@ -3,7 +3,7 @@ defmodule Astarte.RPC.AMQPClient do
   defmacro __using__(opts) do
     amqp_options = Keyword.get(opts, :amqp_options, [])
 
-    quote do
+    quote location: :keep do
       require Logger
       use GenServer
 
