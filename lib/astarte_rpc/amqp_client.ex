@@ -1,8 +1,11 @@
 defmodule Astarte.RPC.AMQPClient do
 
   defmacro __using__(opts) do
+    target_module = __CALLER__.module
+
     rpc_queue = Keyword.fetch!(opts, :rpc_queue)
     amqp_options = Keyword.get(opts, :amqp_options, [])
+    name = Keyword.get(opts, :name, target_module)
 
     quote location: :keep do
       require Logger
@@ -11,7 +14,7 @@ defmodule Astarte.RPC.AMQPClient do
       @connection_backoff 10000
 
       def start_link do
-        GenServer.start_link(__MODULE__, [])
+        GenServer.start_link(__MODULE__, [], name: unquote(name))
       end
 
       def init(_opts) do
