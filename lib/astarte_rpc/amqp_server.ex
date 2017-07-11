@@ -187,11 +187,11 @@ defmodule Astarte.RPC.AMQPServer do
       end
 
       defp maybe_reply({:error, reason}, chan, reply_to, correlation_id) when is_binary(reason) do
-        AMQP.Basic.publish(chan, "", reply_to, reason, [correlation_id: correlation_id])
+        AMQP.Basic.publish(chan, "", reply_to, "error:" <> reason, [correlation_id: correlation_id])
       end
 
       defp maybe_reply({:error, reason}, chan, reply_to, correlation_id) when is_atom(reason) do
-        AMQP.Basic.publish(chan, "", reply_to, to_string(reason), [correlation_id: correlation_id])
+        AMQP.Basic.publish(chan, "", reply_to, "error:" <> to_string(reason), [correlation_id: correlation_id])
       end
 
       defp maybe_reply(_result, _chan, _reply_to, _correlation_id) do
