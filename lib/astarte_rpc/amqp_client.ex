@@ -22,7 +22,8 @@ defmodule Astarte.RPC.AMQPClient do
         with {:ok, conn} <- AMQP.Connection.open(unquote(amqp_options)),
              # Get notifications when the connection goes down
              Process.monitor(conn.pid),
-             {:ok, chan} <- AMQP.Channel.open(conn) do
+             {:ok, chan} <- AMQP.Channel.open(conn),
+             {:ok, %{queue: reply_queue}} <- AMQP.Queue.declare(chan, "", exclusive: true, auto_delete: true) do
 
           {:ok, chan}
 
