@@ -89,8 +89,12 @@ defmodule Astarte.RPC.AMQPClient do
         {:noreply, state}
       end
 
-      def handle_info({:basic_deliver, ser_reply, %{correlation_id: deliver_correlation_id}}, state) do
-        {:noreply, state}
+      def handle_info({:basic_deliver, ser_reply, %{correlation_id: deliver_correlation_id}}, %{pending_reqs: pending} = state) do
+        caller_pid = Map.get(pending, deliver_correlation_id)
+        if caller_pid do
+          GenServer.reply(caller_pid, ser_reply)
+        end
+        {:noreply, %{state | pending_reqs: Map.delete(pending, deliver_correlation_id)}}
       end
 
 
