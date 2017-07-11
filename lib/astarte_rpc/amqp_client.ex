@@ -15,7 +15,7 @@ defmodule Astarte.RPC.AMQPClient do
       end
 
       def init(_opts) do
-        {:ok, chan} = rabbitmq_connect(false)
+        {:ok, state} = rabbitmq_connect(false)
       end
 
       defp rabbitmq_connect(retry \\ true) do
@@ -25,7 +25,8 @@ defmodule Astarte.RPC.AMQPClient do
              {:ok, chan} <- AMQP.Channel.open(conn),
              {:ok, %{queue: reply_queue}} <- AMQP.Queue.declare(chan, "", exclusive: true, auto_delete: true) do
 
-          {:ok, chan}
+          {:ok, %{channel: chan,
+                  reply_queue: reply_queue}}
 
         else
           {:error, reason} ->
@@ -49,17 +50,17 @@ defmodule Astarte.RPC.AMQPClient do
 
       # Server callbacks
 
-      def handle_info({:try_to_connect}, chan) do
-        {:ok, new_chan} = rabbitmq_connect()
-        {:noreply, new_chan}
+      def handle_info({:try_to_connect}, state) do
+        {:ok, new_state} = rabbitmq_connect()
+        {:noreply, new_state}
       end
 
 
       # This callback should try to reconnect to the server
-      def handle_info({:DOWN, _, :process, _pid, _reason}, _chan) do
+      def handle_info({:DOWN, _, :process, _pid, _reason}, _state) do
         Logger.warn("RabbitMQ connection lost. Trying to reconnect...")
-        {:ok, new_chan} = rabbitmq_connect()
-        {:noreply, new_chan}
+        {:ok, new_state} = rabbitmq_connect()
+        {:noreply, new_state}
       end
 
     end # quote
