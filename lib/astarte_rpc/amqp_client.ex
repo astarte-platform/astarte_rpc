@@ -31,7 +31,8 @@ defmodule Astarte.RPC.AMQPClient do
              # Get notifications when the connection goes down
              Process.monitor(conn.pid),
              {:ok, chan} <- AMQP.Channel.open(conn),
-             {:ok, %{queue: reply_queue}} <- AMQP.Queue.declare(chan, "", exclusive: true, auto_delete: true) do
+             {:ok, %{queue: reply_queue}} <- AMQP.Queue.declare(chan, "", exclusive: true, auto_delete: true),
+             {:ok, _consumer_tag} <- AMQP.Basic.consume(chan, reply_queue, self(), no_ack: true) do
 
           {:ok, %{channel: chan,
                   reply_queue: reply_queue,
@@ -71,6 +72,25 @@ defmodule Astarte.RPC.AMQPClient do
         Logger.warn("RabbitMQ connection lost. Trying to reconnect...")
         {:ok, new_state} = rabbitmq_connect()
         {:noreply, new_state}
+      end
+
+      # Confirmation sent by the broker after registering this process as a consumer
+      def handle_info({:basic_consume_ok, %{consumer_tag: _consumer_tag}}, state) do
+        {:noreply, state}
+      end
+
+      # Sent by the broker when the consumer is unexpectedly cancelled (such as after a queue deletion)
+      def handle_info({:basic_cancel, %{consumer_tag: _consumer_tag}}, state) do
+        {:stop, :normal, state}
+      end
+
+      # Confirmation sent by the broker to the consumer process after a Basic.cancel
+      def handle_info({:basic_cancel_ok, %{consumer_tag: _consumer_tag}}, state) do
+        {:noreply, state}
+      end
+
+      def handle_info({:basic_deliver, ser_reply, %{correlation_id: deliver_correlation_id}}, state) do
+        {:noreply, state}
       end
 
 
