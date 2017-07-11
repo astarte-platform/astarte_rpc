@@ -1,6 +1,7 @@
 defmodule Astarte.RPC.AMQPClient do
 
   defmacro __using__(opts) do
+    rpc_queue = Keyword.fetch!(opts, :rpc_queue)
     amqp_options = Keyword.get(opts, :amqp_options, [])
 
     quote location: :keep do
