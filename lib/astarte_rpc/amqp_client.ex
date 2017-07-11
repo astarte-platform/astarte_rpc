@@ -26,6 +26,10 @@ defmodule Astarte.RPC.AMQPClient do
         GenServer.call(unquote(name), {:rpc, ser_payload}, timeout)
       end
 
+      def rpc_cast(ser_payload) do
+        GenServer.cast(unquote(name), {:rpc, ser_payload})
+      end
+
       defp rabbitmq_connect(retry \\ true) do
         with {:ok, conn} <- AMQP.Connection.open(unquote(amqp_options)),
              # Get notifications when the connection goes down
@@ -123,6 +127,20 @@ defmodule Astarte.RPC.AMQPClient do
       def handle_call({:rpc, _not_ser_payload}, _from, state) do
         Logger.warn("rpc must be called with an encoded payload")
         {:reply, :error, state}
+      end
+
+
+      def handle_cast({:rpc, ser_payload}, %{channel: chan} = state) when is_binary(ser_payload) do
+        AMQP.Basic.publish(chan,
+                           "",
+                           @rpc_queue,
+                           ser_payload)
+        {:noreply, state}
+      end
+
+      def handle_cast({:rpc, _not_ser_payload}, state) do
+        Logger.warn("rpc must be called with an encoded payload")
+        {:noreply, state}
       end
 
     end # quote
