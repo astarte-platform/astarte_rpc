@@ -56,7 +56,7 @@ defmodule Astarte.RPC.AMQPServer do
     queue = Keyword.fetch!(opts, :queue)
     amqp_options = Keyword.get(opts, :amqp_options, [])
 
-    quote do
+    quote location: :keep do
       require Logger
       use GenServer
 
