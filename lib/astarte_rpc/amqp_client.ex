@@ -26,7 +26,9 @@ defmodule Astarte.RPC.AMQPClient do
              {:ok, %{queue: reply_queue}} <- AMQP.Queue.declare(chan, "", exclusive: true, auto_delete: true) do
 
           {:ok, %{channel: chan,
-                  reply_queue: reply_queue}}
+                  reply_queue: reply_queue,
+                  correlation_id: 0,
+                  pending_reqs: %{}}}
 
         else
           {:error, reason} ->
