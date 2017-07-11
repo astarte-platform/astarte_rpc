@@ -17,6 +17,10 @@ defmodule Astarte.RPC.AMQPTestEvalServer do
     :ok
   end
 
+  def process_rpc("call:invalid") do
+    {:error, "custom error reason"}
+  end
+
   def process_rpc("call:" <> payload) do
     {value, _bindings} = Code.eval_string(payload)
     {:ok, to_string(value)}
