@@ -1,0 +1,9 @@
+message Reply {
+    int32 version = 1;
+    bool error = 2;
+
+    oneof reply {
+        GenericErrorReply generic_error_reply = 3;
+        DoesRealmExistReply does_realm_exist_reply = 4;
+    }
+}

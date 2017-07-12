@@ -1,0 +1,3 @@
+message DoesRealmExist {
+    string realm = 1;
+}

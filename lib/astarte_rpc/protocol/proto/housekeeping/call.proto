@@ -3,6 +3,7 @@ message Call {
 
     oneof call {
         CreateRealm create_realm = 2;
+        DoesRealmExist does_realm_exist = 3;
     }
 }
 

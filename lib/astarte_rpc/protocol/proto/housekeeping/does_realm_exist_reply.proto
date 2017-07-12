@@ -1,0 +1,3 @@
+message DoesRealmExistReply {
+   bool exists = 1;
+}
