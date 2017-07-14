@@ -6,5 +6,6 @@ message Reply {
         GenericErrorReply generic_error_reply = 3;
         GetInterfaceSourceReply get_interface_source_reply = 4;
         GetInterfaceVersionsListReply get_interface_versions_list_reply = 5;
+        GetInterfacesListReply get_interfaces_list_reply = 6;
     }
 }
