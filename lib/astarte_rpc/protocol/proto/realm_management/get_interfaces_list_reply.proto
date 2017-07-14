@@ -1,0 +1,3 @@
+message GetInterfacesListReply {
+   repeated string interfaces_names = 1;
+}
