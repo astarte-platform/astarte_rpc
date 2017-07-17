@@ -1,6 +1,6 @@
 message Reply {
-    int32 version = 1;
-    bool error = 2;
+    int32 version = 1 [default = 1];
+    bool error = 2 [default = false];
 
     oneof reply {
         GenericErrorReply generic_error_reply = 3;

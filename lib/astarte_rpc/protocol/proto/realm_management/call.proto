@@ -1,5 +1,5 @@
 message Call {
-    int32 version = 1;
+    int32 version = 1 [default = 1];
 
     oneof call {
         InstallInterface install_interface = 2;
