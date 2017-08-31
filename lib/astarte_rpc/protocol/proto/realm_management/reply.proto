@@ -3,6 +3,7 @@ message Reply {
     bool error = 2 [default = false];
 
     oneof reply {
+        GenericOkReply generic_ok_reply = 7;
         GenericErrorReply generic_error_reply = 3;
         GetInterfaceSourceReply get_interface_source_reply = 4;
         GetInterfaceVersionsListReply get_interface_versions_list_reply = 5;
