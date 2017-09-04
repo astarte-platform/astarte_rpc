@@ -4,6 +4,7 @@ message Call {
     oneof call {
         CreateRealm create_realm = 2;
         DoesRealmExist does_realm_exist = 3;
+        GetRealmsList get_realms_list = 4;
     }
 }
 
