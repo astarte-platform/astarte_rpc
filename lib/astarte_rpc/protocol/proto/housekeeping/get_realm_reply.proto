@@ -1,0 +1,3 @@
+message GetRealmReply {
+    string realm_name = 1;
+}
