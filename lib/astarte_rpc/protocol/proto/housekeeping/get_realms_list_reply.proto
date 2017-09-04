@@ -1,0 +1,3 @@
+message GetRealmsListReply {
+    repeated string realms_names = 1;
+}

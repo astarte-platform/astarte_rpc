@@ -6,5 +6,6 @@ message Reply {
         GenericOkReply generic_ok_reply = 5;
         GenericErrorReply generic_error_reply = 3;
         DoesRealmExistReply does_realm_exist_reply = 4;
+        GetRealmsListReply get_realms_list_reply = 6;
     }
 }
