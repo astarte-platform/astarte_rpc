@@ -6,5 +6,6 @@ message Reply {
         GenericOkReply generic_ok_reply = 3;
         GenericErrorReply generic_error_reply = 4;
         GetInfoReply get_info_reply = 5;
+        GenerateAPIKeyReply generate_api_key_reply = 6;
     }
 }
