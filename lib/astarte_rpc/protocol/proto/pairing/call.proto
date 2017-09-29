@@ -1,0 +1,8 @@
+message Call {
+    int32 version = 1 [default = 1];
+
+    oneof call {
+        GetInfo get_info = 2;
+    }
+}
+
