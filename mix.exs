@@ -31,7 +31,7 @@ defmodule Astarte.RPC.Mixfile do
   # Type "mix help deps" for more examples and options
   defp deps do
     [
-      {:amqp, "~> 0.2.2"},
+      {:amqp, "~> 1.0.0-pre.1"},
       {:exprotobuf, "~> 1.2.7"},
       {:distillery, "~> 1.4", runtime: false},
 
