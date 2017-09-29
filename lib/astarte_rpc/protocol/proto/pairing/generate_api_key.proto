@@ -1,0 +1,3 @@
+message GenerateAPIKey {
+    string hw_id = 1;
+}

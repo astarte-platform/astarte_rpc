@@ -3,6 +3,7 @@ message Call {
 
     oneof call {
         GetInfo get_info = 2;
+        GenerateAPIKey generate_api_key = 3;
     }
 }
 
