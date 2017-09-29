@@ -1,0 +1,3 @@
+message VerifyCertificate {
+    string crt = 1;
+}
