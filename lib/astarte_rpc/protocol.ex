@@ -34,15 +34,11 @@ defmodule Astarte.RPC.Protocol do
   defp inject_autoaliases_macro() do
     quote unquote: false do
       defmacro __using__(_opts) do
-        proto_msgs = __MODULE__.defs()
-                     |> Enum.filter(fn elem -> match?({{:msg, _}, _}, elem) end)
-                     |> Enum.map(fn _elem = {{:msg, msg}, _} -> msg end)
-
-        Enum.map(proto_msgs, fn msg ->
+        for {{:msg, msg_module}, _} <- __MODULE__.defs() do
           quote do
-            alias unquote(msg)
+            alias unquote(msg_module)
           end
-        end)
+        end
       end
     end
   end
