@@ -1,0 +1,3 @@
+message DoPairingReply {
+    string client_crt = 1;
+}

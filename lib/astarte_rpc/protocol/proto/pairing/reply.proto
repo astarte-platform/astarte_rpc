@@ -7,5 +7,6 @@ message Reply {
         GenericErrorReply generic_error_reply = 4;
         GetInfoReply get_info_reply = 5;
         GenerateAPIKeyReply generate_api_key_reply = 6;
+        DoPairingReply do_pairing_reply = 7;
     }
 }
