@@ -1,0 +1,7 @@
+message VerifyCertificateReply {
+    bool valid = 1;
+    int64 timestamp = 2;
+    int64 until = 3;
+    CertificateValidationError cause = 4;
+    string details = 5;
+}

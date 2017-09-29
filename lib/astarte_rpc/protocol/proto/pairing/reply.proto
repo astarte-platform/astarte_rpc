@@ -8,5 +8,6 @@ message Reply {
         GetInfoReply get_info_reply = 5;
         GenerateAPIKeyReply generate_api_key_reply = 6;
         DoPairingReply do_pairing_reply = 7;
+        VerifyCertificateReply verify_certificate_reply = 8;
     }
 }
