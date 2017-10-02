@@ -32,8 +32,8 @@ defmodule Astarte.RPC.AMQPClient do
       @connection_backoff 10000
       @rpc_queue unquote(rpc_queue)
 
-      def start_link do
-        GenServer.start_link(__MODULE__, [], name: unquote(name))
+      def start_link(args \\ []) do
+        GenServer.start_link(__MODULE__, args, name: unquote(name))
       end
 
       def init(_opts) do
