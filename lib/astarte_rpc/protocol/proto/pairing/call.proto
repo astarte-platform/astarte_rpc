@@ -1,0 +1,11 @@
+message Call {
+    int32 version = 1 [default = 1];
+
+    oneof call {
+        GetInfo get_info = 2;
+        GenerateAPIKey generate_api_key = 3;
+        DoPairing do_pairing = 4;
+        VerifyCertificate verify_certificate = 5;
+    }
+}
+

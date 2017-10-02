@@ -1,0 +1,3 @@
+message GenerateAPIKeyReply {
+    string api_key = 1;
+}

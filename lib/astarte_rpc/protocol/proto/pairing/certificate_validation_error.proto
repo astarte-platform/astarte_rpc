@@ -1,0 +1,8 @@
+enum CertificateValidationError {
+    INVALID = 0;
+    SELF_SIGNED = 1;
+    EXPIRED = 2;
+    NOT_YET_VALID = 3;
+    BLACKLISTED = 4;
+    UNTRUSTED_SIGNATURE = 5;
+}
