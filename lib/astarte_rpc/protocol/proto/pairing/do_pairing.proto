@@ -1,4 +1,5 @@
 message DoPairing {
     string csr = 1;
     string api_key = 2;
+    string device_ip = 3;
 }
