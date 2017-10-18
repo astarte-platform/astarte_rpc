@@ -1,8 +1,10 @@
 enum CertificateValidationError {
     INVALID = 0;
-    SELF_SIGNED = 1;
-    EXPIRED = 2;
-    NOT_YET_VALID = 3;
-    BLACKLISTED = 4;
-    UNTRUSTED_SIGNATURE = 5;
+    EXPIRED = 1;
+    INVALID_ISSUER = 2;
+    INVALID_SIGNATURE = 3;
+    NAME_NOT_PERMITTED = 4;
+    MISSING_BASIC_CONSTRAINT = 5;
+    INVALID_KEY_USAGE = 6;
+    REVOKED = 7;
 }
