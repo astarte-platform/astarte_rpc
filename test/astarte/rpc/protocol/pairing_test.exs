@@ -9,7 +9,7 @@ defmodule Astarte.RPC.Protocol.PairingTest do
         valid: false,
         timestamp: 123456123456,
         until: 654321654321,
-        cause: :UNTRUSTED_SIGNATURE,
+        cause: :INVALID_SIGNATURE,
         details: "Not trusted"
       }
     version = 1
