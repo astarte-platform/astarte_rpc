@@ -91,6 +91,11 @@ defmodule Astarte.RPC.AMQPServer do
         rabbitmq_connect(false)
       end
 
+      def terminate(_reason, %AMQP.Channel{conn: conn} = chan) do
+        AMQP.Channel.close(chan)
+        AMQP.Connection.close(conn)
+      end
+
       defp rabbitmq_connect(retry \\ true) do
         with {:ok, conn} <- AMQP.Connection.open(unquote(amqp_options)),
              # Get notifications when the connection goes down
