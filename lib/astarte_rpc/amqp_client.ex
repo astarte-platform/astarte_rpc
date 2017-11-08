@@ -48,6 +48,11 @@ defmodule Astarte.RPC.AMQPClient do
         GenServer.cast(unquote(name), {:rpc, ser_payload})
       end
 
+      def terminate(_reason, %AMQP.Channel{conn: conn} = chan) do
+        AMQP.Channel.close(chan)
+        AMQP.Connection.close(conn)
+      end
+
       defp rabbitmq_connect(retry \\ true) do
         with {:ok, conn} <- AMQP.Connection.open(unquote(amqp_options)),
              # Get notifications when the connection goes down
