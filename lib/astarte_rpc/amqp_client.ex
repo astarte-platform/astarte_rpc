@@ -21,16 +21,14 @@ defmodule Astarte.RPC.AMQPClient do
   defmacro __using__(opts) do
     target_module = __CALLER__.module
 
-    rpc_queue = Keyword.fetch!(opts, :rpc_queue)
-    amqp_options = Keyword.get(opts, :amqp_options, [])
     name = Keyword.get(opts, :name, target_module)
 
     quote location: :keep do
       require Logger
       use GenServer
+      alias Astarte.RPC.Config
 
       @connection_backoff 10000
-      @rpc_queue unquote(rpc_queue)
 
       def start_link(args \\ []) do
         GenServer.start_link(__MODULE__, args, name: unquote(name))
@@ -54,7 +52,7 @@ defmodule Astarte.RPC.AMQPClient do
       end
 
       defp rabbitmq_connect(retry \\ true) do
-        with {:ok, conn} <- AMQP.Connection.open(unquote(amqp_options)),
+        with {:ok, conn} <- AMQP.Connection.open(Config.amqp_options()),
              # Get notifications when the connection goes down
              Process.monitor(conn.pid),
              {:ok, chan} <- AMQP.Channel.open(conn),
@@ -145,7 +143,7 @@ defmodule Astarte.RPC.AMQPClient do
 
         AMQP.Basic.publish(chan,
                            "",
-                           @rpc_queue,
+                           Config.amqp_queue!(),
                            ser_payload,
                            reply_to: reply_queue,
                            correlation_id: correlation_id_str)
@@ -166,7 +164,7 @@ defmodule Astarte.RPC.AMQPClient do
       def handle_cast({:rpc, ser_payload}, %{channel: chan} = state) when is_binary(ser_payload) do
         AMQP.Basic.publish(chan,
                            "",
-                           @rpc_queue,
+                           Config.amqp_queue!(),
                            ser_payload)
         {:noreply, state}
       end
