@@ -27,7 +27,7 @@ defmodule Astarte.RPC.AMQPServer do
   `use` macro to implement your AMQP RPC Server
 
     defmodule MyRPCServer do
-      use Astarte.RPC.AMQPServer, queue: "my_rpc_queue"
+      use Astarte.RPC.AMQPServer
       alias Astarte.RPC.Protocol.MyModule, as: MyRPC
 
       def process_rpc(payload)
@@ -71,17 +71,14 @@ defmodule Astarte.RPC.AMQPServer do
   defmacro __using__(opts) do
     target_module = __CALLER__.module
 
-    queue = Keyword.fetch!(opts, :queue)
-    amqp_options = Keyword.get(opts, :amqp_options, [])
-
     quote location: :keep do
       require Logger
       use GenServer
+      alias Astarte.RPC.Config
 
       @behaviour Astarte.RPC.AMQPServer
 
       @connection_backoff 10000
-      @queue unquote(queue)
 
       def start_link(args \\ []) do
         GenServer.start_link(__MODULE__, args)
@@ -97,12 +94,12 @@ defmodule Astarte.RPC.AMQPServer do
       end
 
       defp rabbitmq_connect(retry \\ true) do
-        with {:ok, conn} <- AMQP.Connection.open(unquote(amqp_options)),
+        with {:ok, conn} <- AMQP.Connection.open(Config.amqp_options()),
              # Get notifications when the connection goes down
              Process.monitor(conn.pid),
              {:ok, chan} <- AMQP.Channel.open(conn),
-             {:ok, _queue} <- AMQP.Queue.declare(chan, @queue),
-             {:ok, _consumer_tag} <- AMQP.Basic.consume(chan, @queue) do
+             {:ok, _queue} <- AMQP.Queue.declare(chan, Config.amqp_queue!()),
+             {:ok, _consumer_tag} <- AMQP.Basic.consume(chan, Config.amqp_queue!()) do
 
           {:ok, chan}
 
