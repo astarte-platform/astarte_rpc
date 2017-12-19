@@ -57,6 +57,7 @@ See the moduledoc for `Conform.Schema.Validator` for more details and examples.
       env_var: "ASTARTE_RPC_AMQP_CONNECTION_USERNAME",
       doc: "Username for accessing the AMQP broker.",
       hidden: false,
+      required: false,
       to: "astarte_rpc.amqp_connection.username"
     ],
     "astarte_rpc.amqp_connection.password": [
@@ -65,6 +66,7 @@ See the moduledoc for `Conform.Schema.Validator` for more details and examples.
       env_var: "ASTARTE_RPC_AMQP_CONNECTION_PASSWORD",
       doc: "Password for accessing the AMQP broker.",
       hidden: false,
+      required: false,
       to: "astarte_rpc.amqp_connection.password"
     ],
     "astarte_rpc.amqp_connection.host": [
@@ -73,6 +75,7 @@ See the moduledoc for `Conform.Schema.Validator` for more details and examples.
       env_var: "ASTARTE_RPC_AMQP_CONNECTION_HOST",
       doc: "The hostname or IP of the AMQP broker.",
       hidden: false,
+      required: false,
       to: "astarte_rpc.amqp_connection.host"
     ],
     "astarte_rpc.amqp_connection.virtual_host": [
@@ -81,6 +84,7 @@ See the moduledoc for `Conform.Schema.Validator` for more details and examples.
       env_var: "ASTARTE_RPC_AMQP_CONNECTION_VIRTUAL_HOST",
       doc: "The Virtual Host to be used in the AMQP broker. Must be the same for all components.",
       hidden: false,
+      required: false,
       to: "astarte_rpc.amqp_connection.virtual_host"
     ],
     "astarte_rpc.amqp_connection.port": [
@@ -89,6 +93,7 @@ See the moduledoc for `Conform.Schema.Validator` for more details and examples.
       env_var: "ASTARTE_RPC_AMQP_CONNECTION_PORT",
       doc: "The port of the AMQP broker to connect to.",
       hidden: false,
+      required: false,
       to: "astarte_rpc.amqp_connection.port"
     ],
     "astarte_rpc.amqp_queue": [
