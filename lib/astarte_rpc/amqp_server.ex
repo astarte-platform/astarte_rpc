@@ -68,7 +68,7 @@ defmodule Astarte.RPC.AMQPServer do
     {:error, :retry} |
     {:error, reason :: term}
 
-  defmacro __using__(opts) do
+  defmacro __using__(_opts) do
     target_module = __CALLER__.module
 
     quote location: :keep do
