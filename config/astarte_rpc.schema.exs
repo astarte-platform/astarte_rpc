@@ -56,6 +56,7 @@ See the moduledoc for `Conform.Schema.Validator` for more details and examples.
       datatype: :binary,
       env_var: "ASTARTE_RPC_AMQP_CONNECTION_USERNAME",
       doc: "Username for accessing the AMQP broker.",
+      default: "guest",
       hidden: false,
       required: false,
       to: "astarte_rpc.amqp_connection.username"
@@ -65,6 +66,7 @@ See the moduledoc for `Conform.Schema.Validator` for more details and examples.
       datatype: :binary,
       env_var: "ASTARTE_RPC_AMQP_CONNECTION_PASSWORD",
       doc: "Password for accessing the AMQP broker.",
+      default: "guest",
       hidden: false,
       required: false,
       to: "astarte_rpc.amqp_connection.password"
@@ -74,6 +76,7 @@ See the moduledoc for `Conform.Schema.Validator` for more details and examples.
       datatype: :binary,
       env_var: "ASTARTE_RPC_AMQP_CONNECTION_HOST",
       doc: "The hostname or IP of the AMQP broker.",
+      default: "localhost",
       hidden: false,
       required: false,
       to: "astarte_rpc.amqp_connection.host"
@@ -83,6 +86,7 @@ See the moduledoc for `Conform.Schema.Validator` for more details and examples.
       datatype: :binary,
       env_var: "ASTARTE_RPC_AMQP_CONNECTION_VIRTUAL_HOST",
       doc: "The Virtual Host to be used in the AMQP broker. Must be the same for all components.",
+      default: "/",
       hidden: false,
       required: false,
       to: "astarte_rpc.amqp_connection.virtual_host"
@@ -92,6 +96,7 @@ See the moduledoc for `Conform.Schema.Validator` for more details and examples.
       datatype: :integer,
       env_var: "ASTARTE_RPC_AMQP_CONNECTION_PORT",
       doc: "The port of the AMQP broker to connect to.",
+      default: 5672,
       hidden: false,
       required: false,
       to: "astarte_rpc.amqp_connection.port"
@@ -102,6 +107,7 @@ See the moduledoc for `Conform.Schema.Validator` for more details and examples.
       env_var: "ASTARTE_RPC_AMQP_QUEUE",
       doc: "The AMQP queue used by Astarte RPC for receiving messages, or the routing key for sending messages.",
       hidden: false,
+      required: true,
       to: "astarte_rpc.amqp_queue"
     ]
  ],
