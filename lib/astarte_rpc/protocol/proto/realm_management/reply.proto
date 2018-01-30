@@ -8,5 +8,6 @@ message Reply {
         GetInterfaceSourceReply get_interface_source_reply = 4;
         GetInterfaceVersionsListReply get_interface_versions_list_reply = 5;
         GetInterfacesListReply get_interfaces_list_reply = 6;
+        GetJWTPublicKeyPEMReply get_jwt_public_key_pem_reply = 8;
     }
 }
