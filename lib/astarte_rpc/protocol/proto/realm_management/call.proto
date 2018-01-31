@@ -8,5 +8,6 @@ message Call {
         GetInterfaceSource get_interface_source = 3;
         GetInterfaceVersionsList get_interface_versions_list = 4;
         GetInterfacesList get_interfaces_list = 5;
+        GetJWTPublicKeyPEM get_jwt_public_key_pem = 8;
     }
 }
