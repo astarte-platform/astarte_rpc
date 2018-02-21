@@ -9,5 +9,7 @@ message Reply {
         GetInterfaceVersionsListReply get_interface_versions_list_reply = 5;
         GetInterfacesListReply get_interfaces_list_reply = 6;
         GetJWTPublicKeyPEMReply get_jwt_public_key_pem_reply = 8;
+        GetTriggerReply get_trigger_reply = 9;
+        GetTriggersListReply get_triggers_list_reply = 10;
     }
 }

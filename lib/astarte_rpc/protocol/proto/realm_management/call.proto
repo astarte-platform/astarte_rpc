@@ -10,5 +10,9 @@ message Call {
         GetInterfacesList get_interfaces_list = 5;
         GetJWTPublicKeyPEM get_jwt_public_key_pem = 8;
         UpdateJWTPublicKeyPEM update_jwt_public_key_pem = 9;
+        InstallTrigger install_trigger = 10;
+        GetTrigger get_trigger = 11;
+        GetTriggersList get_triggers_list = 12;
+        DeleteTrigger delete_trigger = 13;
     }
 }
