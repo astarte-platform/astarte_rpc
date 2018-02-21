@@ -1,0 +1,4 @@
+message InstallTrigger {
+    string realm_name = 1;
+    bytes trigger_data = 2;
+}

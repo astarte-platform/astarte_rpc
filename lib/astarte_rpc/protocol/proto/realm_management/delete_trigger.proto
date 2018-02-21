@@ -1,0 +1,4 @@
+message DeleteTrigger {
+    string realm_name = 1;
+    string trigger_name = 2;
+}

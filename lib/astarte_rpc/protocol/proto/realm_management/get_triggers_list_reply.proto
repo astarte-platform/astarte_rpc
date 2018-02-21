@@ -1,0 +1,3 @@
+message GetTriggersListReply {
+   repeated string triggers_names = 1;
+}
