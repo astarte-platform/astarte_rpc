@@ -109,6 +109,16 @@ See the moduledoc for `Conform.Schema.Validator` for more details and examples.
       hidden: false,
       required: true,
       to: "astarte_rpc.amqp_queue"
+    ],
+    "astarte_rpc.amqp_prefetch_count": [
+      commented: true,
+      datatype: :integer,
+      env_var: "ASTARTE_RPC_AMQP_PREFETCH_COUNT",
+      doc: "The prefetch count of the AMQP connection. A prefetch count of 0 means unlimited (not recommended).",
+      default: 300,
+      hidden: false,
+      required: true,
+      to: "astarte_rpc.amqp_prefetch_count"
     ]
  ],
  transforms: [],
