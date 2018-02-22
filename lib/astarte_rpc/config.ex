@@ -37,4 +37,11 @@ defmodule Astarte.RPC.Config do
   def amqp_options do
     Application.get_env(:astarte_rpc, :amqp_connection, [])
   end
+
+  @doc """
+  Returns the amqp prefetch count. Defaults to 300.
+  """
+  def amqp_prefetch_count do
+    Application.get_env(:astarte_rpc, :amqp_prefetch_count, 300)
+  end
 end
