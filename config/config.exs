@@ -28,4 +28,7 @@ use Mix.Config
 # here (which is why it is important to import them last).
 #
 
+config :astarte_rpc, :amqp_prefetch_count,
+  300
+
 import_config "#{Mix.env}.exs"
