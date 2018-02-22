@@ -1,5 +1,11 @@
 message InstallTrigger {
     string realm_name = 1;
     bytes trigger_data = 2;
-    repeated bytes simple_triggers_data = 3;
+
+    message SimpleTriggerDataContainer {
+        bytes object_id = 1;
+        int32 object_type = 2;
+        bytes data = 3;
+    }
+    repeated SimpleTriggerDataContainer simple_triggers_data_container = 3;
 }
