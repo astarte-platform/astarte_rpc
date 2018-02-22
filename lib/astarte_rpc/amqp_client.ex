@@ -56,6 +56,7 @@ defmodule Astarte.RPC.AMQPClient do
              # Get notifications when the connection goes down
              Process.monitor(conn.pid),
              {:ok, chan} <- AMQP.Channel.open(conn),
+             :ok <- AMQP.Basic.qos(chan, prefetch_count: Config.amqp_prefetch_count()),
              {:ok, %{queue: reply_queue}} <- AMQP.Queue.declare(chan, "", exclusive: true, auto_delete: true),
              {:ok, _consumer_tag} <- AMQP.Basic.consume(chan, reply_queue, self(), no_ack: true) do
 
