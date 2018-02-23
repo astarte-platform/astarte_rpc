@@ -1,3 +1,10 @@
 message GetTriggerReply {
     bytes trigger_data = 1;
+
+    message SimpleTriggerDataContainer {
+        bytes object_id = 1;
+        int32 object_type = 2;
+        bytes data = 3;
+    }
+    repeated SimpleTriggerDataContainer simple_triggers_data_container = 2;
 }
