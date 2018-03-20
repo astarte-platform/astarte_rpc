@@ -7,7 +7,7 @@ defmodule Astarte.RPC.Protocol.RealmManagementTest do
     "version_major": 1,
     "version_minor": 0,
     "type": "properties",
-    "ownership": "thing",
+    "ownership": "device",
     "mappings": [
       {
         "path": "/test",
