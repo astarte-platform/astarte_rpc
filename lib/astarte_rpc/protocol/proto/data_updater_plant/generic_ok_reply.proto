@@ -1,0 +1,3 @@
+message GenericOkReply {
+    bool async_operation = 1 [default = false];
+}

@@ -1,0 +1,9 @@
+message Reply {
+    int32 version = 1 [default = 1];
+    bool error = 2 [default = false];
+
+    oneof reply {
+        GenericOkReply generic_ok_reply = 3;
+        GenericErrorReply generic_error_reply = 4;
+    }
+}
