@@ -4,6 +4,7 @@ message InstallVolatileTrigger {
     bytes object_id = 3;
     int32 object_type = 4;
     bytes parent_id = 5;
+    bytes simple_trigger_id = 8;
     bytes simple_trigger = 6;
     bytes trigger_target = 7;
 }

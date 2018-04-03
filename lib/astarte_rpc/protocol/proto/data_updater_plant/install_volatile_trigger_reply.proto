@@ -1,3 +1,0 @@
-message InstallVolatileTriggerReply {
-    bytes trigger_id = 1;
-}
