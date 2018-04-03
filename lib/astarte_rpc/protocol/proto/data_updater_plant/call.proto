@@ -3,6 +3,7 @@ message Call {
 
     oneof call {
         InstallVolatileTrigger install_volatile_trigger = 2;
+        DeleteVolatileTrigger delete_volatile_trigger = 3;
     }
 }
 
