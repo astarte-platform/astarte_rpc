@@ -30,6 +30,8 @@ defmodule Astarte.RPC.AMQPClient do
 
       @connection_backoff 10000
 
+      @behaviour Astarte.RPC.Client
+
       def start_link(args \\ []) do
         GenServer.start_link(__MODULE__, args, name: unquote(name))
       end
@@ -38,11 +40,11 @@ defmodule Astarte.RPC.AMQPClient do
         {:ok, state} = rabbitmq_connect(false)
       end
 
-      def rpc_call(ser_payload, timeout \\ 5000) do
+      def rpc_call(ser_payload, timeout \\ 5000) when is_binary(ser_payload) do
         GenServer.call(unquote(name), {:rpc, ser_payload}, timeout)
       end
 
-      def rpc_cast(ser_payload) do
+      def rpc_cast(ser_payload) when is_binary(ser_payload) do
         GenServer.cast(unquote(name), {:rpc, ser_payload})
       end
 
@@ -134,7 +136,7 @@ defmodule Astarte.RPC.AMQPClient do
         GenServer.reply(caller, {:ok, ok_reply})
       end
 
-      def handle_call({:rpc, ser_payload}, from, state) when is_binary(ser_payload) do
+      def handle_call({:rpc, ser_payload}, from, state) do
         %{channel: chan,
           reply_queue: reply_queue,
           correlation_id: correlation_id,
@@ -156,22 +158,11 @@ defmodule Astarte.RPC.AMQPClient do
 
       end
 
-      def handle_call({:rpc, _not_ser_payload}, _from, state) do
-        Logger.warn("rpc must be called with an encoded payload")
-        {:reply, :error, state}
-      end
-
-
-      def handle_cast({:rpc, ser_payload}, %{channel: chan} = state) when is_binary(ser_payload) do
+      def handle_cast({:rpc, ser_payload}, %{channel: chan} = state) do
         AMQP.Basic.publish(chan,
                            "",
                            Config.amqp_queue!(),
                            ser_payload)
-        {:noreply, state}
-      end
-
-      def handle_cast({:rpc, _not_ser_payload}, state) do
-        Logger.warn("rpc must be called with an encoded payload")
         {:noreply, state}
       end
 
