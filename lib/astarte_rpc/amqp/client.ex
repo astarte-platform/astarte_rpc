@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2017 Ispirata Srl
+# Copyright (C) 2018 Ispirata Srl
 #
 # This file is part of Astarte.
 # Astarte is free software: you can redistribute it and/or modify
@@ -16,7 +16,7 @@
 # along with Astarte.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-defmodule Astarte.RPC.AMQPClient do
+defmodule Astarte.RPC.AMQP.Client do
 
   defmacro __using__(opts) do
     target_module = __CALLER__.module
