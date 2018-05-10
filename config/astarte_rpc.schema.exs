@@ -101,15 +101,6 @@ See the moduledoc for `Conform.Schema.Validator` for more details and examples.
       required: false,
       to: "astarte_rpc.amqp_connection.port"
     ],
-    "astarte_rpc.amqp_queue": [
-      commented: true,
-      datatype: :binary,
-      env_var: "ASTARTE_RPC_AMQP_QUEUE",
-      doc: "The AMQP queue used by Astarte RPC for receiving messages, or the routing key for sending messages.",
-      hidden: false,
-      required: true,
-      to: "astarte_rpc.amqp_queue"
-    ],
     "astarte_rpc.amqp_prefetch_count": [
       commented: true,
       datatype: :integer,

@@ -23,15 +23,6 @@ defmodule Astarte.RPC.Config do
   """
 
   @doc """
-  Returns the amqp_queue contained in the config.
-
-  Raises if it doesn't exist since it's required.
-  """
-  def amqp_queue! do
-    Application.fetch_env!(:astarte_rpc, :amqp_queue)
-  end
-
-  @doc """
   Returns the amqp_connection options or an empty list if they're not set.
   """
   def amqp_options do
