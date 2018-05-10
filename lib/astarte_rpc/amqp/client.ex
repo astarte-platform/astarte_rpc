@@ -42,7 +42,8 @@ defmodule Astarte.RPC.AMQP.Client do
   # Callbacks
 
   def init(_opts) do
-    {:ok, state} = rabbitmq_connect(false)
+    send(self(), :try_to_connect)
+    {:ok, :not_connected}
   end
 
   def terminate(_reason, %AMQP.Channel{conn: conn} = chan) do
@@ -83,15 +84,15 @@ defmodule Astarte.RPC.AMQP.Client do
     {:noreply, state}
   end
 
-  def handle_info({:try_to_connect}, state) do
-    {:ok, new_state} = rabbitmq_connect()
+  def handle_info(:try_to_connect, _state) do
+    {:ok, new_state} = connect()
     {:noreply, new_state}
   end
 
   # This callback should try to reconnect to the server
   def handle_info({:DOWN, _, :process, _pid, _reason}, _state) do
     Logger.warn("RabbitMQ connection lost. Trying to reconnect...")
-    {:ok, new_state} = rabbitmq_connect()
+    {:ok, new_state} = connect()
     {:noreply, new_state}
   end
 
@@ -120,34 +121,26 @@ defmodule Astarte.RPC.AMQP.Client do
     {:noreply, %{state | pending_reqs: Map.delete(pending, deliver_correlation_id)}}
   end
 
-  defp rabbitmq_connect(retry \\ true) do
+  defp connect do
     with {:ok, conn} <- AMQP.Connection.open(Config.amqp_options()),
-         # Get notifications when the connection goes down
-         Process.monitor(conn.pid),
          {:ok, chan} <- AMQP.Channel.open(conn),
          :ok <- AMQP.Basic.qos(chan, prefetch_count: Config.amqp_prefetch_count()),
          {:ok, %{queue: reply_queue}} <-
            AMQP.Queue.declare(chan, "", exclusive: true, auto_delete: true),
-         {:ok, _consumer_tag} <- AMQP.Basic.consume(chan, reply_queue, self(), no_ack: true) do
+         {:ok, _consumer_tag} <- AMQP.Basic.consume(chan, reply_queue, self(), no_ack: true),
+         # Get notifications when the chan or conn go down
+         Process.monitor(chan.pid) do
       {:ok, %{channel: chan, reply_queue: reply_queue, correlation_id: 0, pending_reqs: %{}}}
     else
       {:error, reason} ->
         Logger.warn("RabbitMQ Connection error: " <> inspect(reason))
-        maybe_retry(retry)
+        retry_connection_after(@connection_backoff)
+        {:ok, :not_connected}
 
       :error ->
         Logger.warn("Unknown RabbitMQ connection error")
-        maybe_retry(retry)
-    end
-  end
-
-  defp maybe_retry(retry) do
-    if retry do
-      Logger.warn("Retrying connection in #{@connection_backoff} ms")
-      :erlang.send_after(@connection_backoff, :erlang.self(), {:try_to_connect})
-      {:ok, :not_connected}
-    else
-      {:stop, :connection_failed}
+        retry_connection_after(@connection_backoff)
+        {:ok, :not_connected}
     end
   end
 
@@ -161,5 +154,10 @@ defmodule Astarte.RPC.AMQP.Client do
 
   defp maybe_reply(caller, ok_reply) do
     GenServer.reply(caller, {:ok, ok_reply})
+  end
+
+  defp retry_connection_after(backoff) do
+    Logger.warn("Retrying connection in #{backoff} ms")
+    Process.send_after(self(), :try_to_connect, backoff)
   end
 end
