@@ -20,5 +20,5 @@ defmodule Astarte.RPC.Protocol.DataUpdaterPlant do
   @external_resource Path.expand("proto/data_updater_plant", __DIR__)
 
   use Protobuf, from: Path.wildcard(Path.expand("proto/data_updater_plant/*.proto", __DIR__))
-  use Astarte.RPC.Protocol
+  use Astarte.RPC.Protocol, amqp_queue: "data_updater_plant_rpc"
 end
