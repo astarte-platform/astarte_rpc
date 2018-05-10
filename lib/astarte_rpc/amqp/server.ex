@@ -56,7 +56,7 @@ defmodule Astarte.RPC.AMQP.Server do
   end
 
   def handle_info(:try_to_connect, state) do
-    {:ok, connection_state} = connect()
+    {:ok, connection_state} = connect(state.queue_name)
     {:noreply, Map.merge(state, connection_state)}
   end
 
@@ -90,7 +90,7 @@ defmodule Astarte.RPC.AMQP.Server do
   # This callback should try to reconnect to the server
   def handle_info({:DOWN, _, :process, _pid, _reason}, state) do
     Logger.warn("RabbitMQ connection lost. Trying to reconnect...")
-    {:ok, connection_state} = connect()
+    {:ok, connection_state} = connect(state.queue_name)
     {:noreply, Map.merge(state, connection_state)}
   end
 
@@ -132,12 +132,12 @@ defmodule Astarte.RPC.AMQP.Server do
     result
   end
 
-  defp connect do
+  defp connect(queue_name) do
     with {:ok, conn} <- AMQP.Connection.open(Config.amqp_options()),
          {:ok, chan} <- AMQP.Channel.open(conn),
          :ok <- AMQP.Basic.qos(chan, prefetch_count: Config.amqp_prefetch_count()),
-         {:ok, _queue} <- AMQP.Queue.declare(chan, Config.amqp_queue!()),
-         {:ok, _consumer_tag} <- AMQP.Basic.consume(chan, Config.amqp_queue!()),
+         {:ok, _queue} <- AMQP.Queue.declare(chan, queue_name),
+         {:ok, _consumer_tag} <- AMQP.Basic.consume(chan, queue_name),
          # Get notifications when the chan or conn go down
          Process.monitor(chan.pid) do
       {:ok, %{channel: chan}}
