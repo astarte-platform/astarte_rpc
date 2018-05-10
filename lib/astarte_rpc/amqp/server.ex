@@ -76,8 +76,14 @@ defmodule Astarte.RPC.AMQP.Server do
   end
 
   def handle_info({:basic_deliver, payload, meta}, state) do
+    %{
+      channel: chan,
+      handler: handler
+    } = state
+
     # We process the message asynchronously
-    spawn_link(fn -> consume(state.channel, payload, meta) end)
+    spawn(fn -> handle(handler, chan, payload, meta) end)
+
     {:noreply, state}
   end
 
@@ -88,15 +94,15 @@ defmodule Astarte.RPC.AMQP.Server do
     {:noreply, Map.merge(state, connection_state)}
   end
 
-  defp consume(chan, payload, meta) do
-    apply_process_rpc(payload)
+  defp handle(handler, chan, payload, meta) do
+    apply_handle_rpc(handler, payload)
     |> ack_or_reject(chan, meta.delivery_tag)
     |> maybe_reply(chan, meta.reply_to, meta.correlation_id)
   end
 
-  defp apply_process_rpc(payload) do
+  defp apply_handle_rpc(handler, payload) do
     try do
-      apply(unquote(target_module), :process_rpc, [payload])
+      apply(handler, :handle_rpc, [payload])
     rescue
       e ->
         Logger.warn("Exception while handling message: #{inspect(e)}")
