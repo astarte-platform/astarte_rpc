@@ -54,9 +54,12 @@ defmodule Astarte.RPC.AMQP.Client do
      }}
   end
 
-  def terminate(_reason, %AMQP.Channel{conn: conn} = chan) do
-    AMQP.Channel.close(chan)
-    AMQP.Connection.close(conn)
+  def terminate(_reason, state) do
+    if state.channel do
+      conn = state.channel.conn
+      AMQP.Channel.close(state.channel)
+      AMQP.Connection.close(conn)
+    end
   end
 
   def handle_call({:rpc, _ser_payload, _routing_key}, _from, %{channel: nil} = state) do
