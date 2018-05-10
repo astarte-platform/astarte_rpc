@@ -30,15 +30,21 @@ defmodule Astarte.RPC.AMQP.Server do
 
   # API
 
-  def start_link(args \\ []) do
+  def start_link(args) do
     GenServer.start_link(__MODULE__, args)
   end
 
   # Callbacks
 
-  def init(_opts) do
+  def init(opts) do
+    handler = Keyword.fetch!(opts, :handler)
+    amqp_queue = Keyword.fetch!(opts, :amqp_queue)
+    prefix = Keyword.get(opts, :amqp_prefix, "astarte_")
+
+    prefixed_queue = prefix <> amqp_queue
+
     send(self(), :try_to_connect)
-    {:ok, %{channel: nil}}
+    {:ok, %{channel: nil, handler: handler, queue_name: prefixed_queue}}
   end
 
   def terminate(_reason, state) do
