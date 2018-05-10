@@ -41,9 +41,17 @@ defmodule Astarte.RPC.AMQP.Client do
 
   # Callbacks
 
-  def init(_opts) do
+  def init(opts) do
+    prefix = Keyword.get(opts, :amqp_prefix, "astarte_")
     send(self(), :try_to_connect)
-    {:ok, :not_connected}
+
+    {:ok,
+     %{
+       channel: nil,
+       reply_queue: nil,
+       pending_reqs: %{},
+       prefix: prefix
+     }}
   end
 
   def terminate(_reason, %AMQP.Channel{conn: conn} = chan) do
