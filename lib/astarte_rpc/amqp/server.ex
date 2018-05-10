@@ -101,7 +101,7 @@ defmodule Astarte.RPC.AMQP.Server do
     result
   end
 
-  defp ack_or_reject(result = {:ok, reply}, chan, delivery_tag) do
+  defp ack_or_reject(result = {:ok, _reply}, chan, delivery_tag) do
     AMQP.Basic.ack(chan, delivery_tag)
     result
   end
@@ -148,8 +148,8 @@ defmodule Astarte.RPC.AMQP.Server do
     end
   end
 
-  defp maybe_reply({status, _reply}, _chan, :undefined, _correlation_id) do
-    Logger.warn("Got a reply but no queue to write it to")
+  defp maybe_reply(reply, _chan, :undefined, _correlation_id) do
+    Logger.warn("Got a reply but no queue to write it to: #{reply}")
   end
 
   defp maybe_reply({:ok, reply}, chan, reply_to, correlation_id) do
