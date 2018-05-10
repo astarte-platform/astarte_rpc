@@ -26,8 +26,6 @@ defmodule Astarte.RPC.AMQP.Server do
   use GenServer
   alias Astarte.RPC.Config
 
-  @behaviour Astarte.RPC.AMQPServer
-
   @connection_backoff 10000
 
   # API
@@ -39,45 +37,49 @@ defmodule Astarte.RPC.AMQP.Server do
   # Callbacks
 
   def init(_opts) do
-    rabbitmq_connect(false)
+    send(self(), :try_to_connect)
+    {:ok, %{channel: nil}}
   end
 
-  def terminate(_reason, %AMQP.Channel{conn: conn} = chan) do
-    AMQP.Channel.close(chan)
-    AMQP.Connection.close(conn)
+  def terminate(_reason, state) do
+    if state.channel do
+      conn = state.channel.conn
+      AMQP.Channel.close(state.channel)
+      AMQP.Connection.close(conn)
+    end
   end
 
-  def handle_info({:try_to_connect}, chan) do
-    {:ok, new_chan} = rabbitmq_connect()
-    {:noreply, new_chan}
+  def handle_info(:try_to_connect, state) do
+    {:ok, connection_state} = connect()
+    {:noreply, Map.merge(state, connection_state)}
   end
 
   # Confirmation sent by the broker after registering this process as a consumer
-  def handle_info({:basic_consume_ok, %{consumer_tag: _consumer_tag}}, chan) do
-    {:noreply, chan}
+  def handle_info({:basic_consume_ok, %{consumer_tag: _consumer_tag}}, state) do
+    {:noreply, state}
   end
 
   # Sent by the broker when the consumer is unexpectedly cancelled (such as after a queue deletion)
-  def handle_info({:basic_cancel, %{consumer_tag: _consumer_tag}}, chan) do
-    {:stop, :normal, chan}
+  def handle_info({:basic_cancel, %{consumer_tag: _consumer_tag}}, state) do
+    {:stop, :normal, state}
   end
 
   # Confirmation sent by the broker to the consumer process after a Basic.cancel
-  def handle_info({:basic_cancel_ok, %{consumer_tag: _consumer_tag}}, chan) do
-    {:noreply, chan}
+  def handle_info({:basic_cancel_ok, %{consumer_tag: _consumer_tag}}, state) do
+    {:noreply, state}
   end
 
-  def handle_info({:basic_deliver, payload, meta}, chan) do
+  def handle_info({:basic_deliver, payload, meta}, state) do
     # We process the message asynchronously
-    spawn_link(fn -> consume(chan, payload, meta) end)
-    {:noreply, chan}
+    spawn_link(fn -> consume(state.channel, payload, meta) end)
+    {:noreply, state}
   end
 
   # This callback should try to reconnect to the server
-  def handle_info({:DOWN, _, :process, _pid, _reason}, _chan) do
+  def handle_info({:DOWN, _, :process, _pid, _reason}, state) do
     Logger.warn("RabbitMQ connection lost. Trying to reconnect...")
-    {:ok, new_chan} = rabbitmq_connect()
-    {:noreply, new_chan}
+    {:ok, connection_state} = connect()
+    {:noreply, Map.merge(state, connection_state)}
   end
 
   defp consume(chan, payload, meta) do
@@ -118,34 +120,31 @@ defmodule Astarte.RPC.AMQP.Server do
     result
   end
 
-  defp rabbitmq_connect(retry \\ true) do
+  defp connect do
     with {:ok, conn} <- AMQP.Connection.open(Config.amqp_options()),
-         # Get notifications when the connection goes down
-         Process.monitor(conn.pid),
          {:ok, chan} <- AMQP.Channel.open(conn),
          :ok <- AMQP.Basic.qos(chan, prefetch_count: Config.amqp_prefetch_count()),
          {:ok, _queue} <- AMQP.Queue.declare(chan, Config.amqp_queue!()),
-         {:ok, _consumer_tag} <- AMQP.Basic.consume(chan, Config.amqp_queue!()) do
-      {:ok, chan}
+         {:ok, _consumer_tag} <- AMQP.Basic.consume(chan, Config.amqp_queue!()),
+         # Get notifications when the chan or conn go down
+         Process.monitor(chan.pid) do
+      {:ok, %{channel: chan}}
     else
       {:error, reason} ->
         Logger.warn("RabbitMQ Connection error: " <> inspect(reason))
-        maybe_retry(retry)
+        retry_after(@connection_backoff)
+        {:ok, %{channel: nil}}
 
       :error ->
         Logger.warn("Unknown RabbitMQ connection error")
-        maybe_retry(retry)
+        retry_after(@connection_backoff)
+        {:ok, %{channel: nil}}
     end
   end
 
-  defp maybe_retry(retry) do
-    if retry do
-      Logger.warn("Retrying connection in #{@connection_backoff} ms")
-      :erlang.send_after(@connection_backoff, :erlang.self(), {:try_to_connect})
-      {:ok, :not_connected}
-    else
-      {:stop, :connection_failed}
-    end
+  defp retry_after(backoff) do
+    Logger.warn("Retrying connection in #{backoff} ms")
+    Process.send_after(self(), :try_to_connect, backoff)
   end
 
   defp maybe_reply(reply, _chan, :undefined, _correlation_id) do
