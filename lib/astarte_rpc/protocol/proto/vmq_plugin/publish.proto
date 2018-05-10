@@ -1,0 +1,5 @@
+message Publish {
+    repeated string topic_tokens = 1;
+    bytes payload = 2;
+    int32 qos = 3;
+}

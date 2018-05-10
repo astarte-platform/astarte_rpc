@@ -1,0 +1,7 @@
+message Call {
+    int32 version = 1 [default = 1];
+
+    oneof call {
+        Publish publish = 2;
+    }
+}
