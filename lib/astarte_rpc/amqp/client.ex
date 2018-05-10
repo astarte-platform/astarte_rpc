@@ -83,12 +83,9 @@ defmodule Astarte.RPC.AMQP.Client do
       correlation_id: correlation_id
     )
 
-    {:noreply,
-     %{
-       channel: chan,
-       reply_queue: reply_queue,
-       pending_reqs: Map.put(pending, correlation_id, from)
-     }}
+    new_pending = Map.put(pending, correlation_id, from)
+
+    {:noreply, %{state | pending_reqs: new_pending}}
   end
 
   def handle_cast({:rpc, ser_payload, _routing_key}, %{channel: nil} = state) do
