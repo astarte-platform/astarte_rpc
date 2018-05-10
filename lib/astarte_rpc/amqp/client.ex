@@ -59,6 +59,10 @@ defmodule Astarte.RPC.AMQP.Client do
     AMQP.Connection.close(conn)
   end
 
+  def handle_call({:rpc, _routing_key, _ser_payload}, _from, %{channel: nil} = state) do
+    {:reply, {:error, :retry}, state}
+  end
+
   def handle_call({:rpc, ser_payload}, from, state) do
     %{
       channel: chan,
@@ -83,6 +87,11 @@ defmodule Astarte.RPC.AMQP.Client do
        reply_queue: reply_queue,
        pending_reqs: Map.put(pending, correlation_id, from)
      }}
+  end
+
+  def handle_cast({:rpc, _routing_key, ser_payload}, %{channel: nil} = state) do
+    Logger.warn("RPC cast while not connected: #{inspect(ser_payload)}")
+    {:noreply, state}
   end
 
   def handle_cast({:rpc, ser_payload}, %{channel: chan} = state) do
