@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2017 Ispirata Srl
+# Copyright (C) 2018 Ispirata Srl
 #
 # This file is part of Astarte.
 # Astarte is free software: you can redistribute it and/or modify
@@ -18,28 +18,7 @@
 
 defmodule Astarte.RPC.Protocol do
   @moduledoc """
-  This is a utility module to inject a `__using__` macro to the
-  Astarte.RPC.Protocol modules (e.g. Housekeeping, RealmManagement...).
-
-  To do this just `use Astarte.RPC.Protocol`.
-
-  The generated `__using__` macro makes it possible to do something like
-  `use Astarte.RPC.Protocol.Housekeeping` and alias all the messages defined
-  under the `Astarte.RPC.Protocol.Housekeeping`.
   """
   defmacro __using__(_opts) do
-    inject_autoaliases_macro()
-  end
-
-  defp inject_autoaliases_macro() do
-    quote unquote: false do
-      defmacro __using__(_opts) do
-        for {{:msg, msg_module}, _} <- __MODULE__.defs() do
-          quote do
-            alias unquote(msg_module)
-          end
-        end
-      end
-    end
   end
 end
