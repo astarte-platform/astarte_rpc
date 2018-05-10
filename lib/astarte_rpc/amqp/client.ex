@@ -55,11 +55,10 @@ defmodule Astarte.RPC.AMQP.Client do
     %{
       channel: chan,
       reply_queue: reply_queue,
-      correlation_id: correlation_id,
       pending_reqs: pending
     } = state
 
-    correlation_id_str = Integer.to_string(correlation_id)
+    correlation_id = gen_correlation_id()
 
     AMQP.Basic.publish(
       chan,
@@ -67,15 +66,14 @@ defmodule Astarte.RPC.AMQP.Client do
       Config.amqp_queue!(),
       ser_payload,
       reply_to: reply_queue,
-      correlation_id: correlation_id_str
+      correlation_id: correlation_id
     )
 
     {:noreply,
      %{
        channel: chan,
        reply_queue: reply_queue,
-       correlation_id: correlation_id + 1,
-       pending_reqs: Map.put(pending, correlation_id_str, from)
+       pending_reqs: Map.put(pending, correlation_id, from)
      }}
   end
 
@@ -130,7 +128,7 @@ defmodule Astarte.RPC.AMQP.Client do
          {:ok, _consumer_tag} <- AMQP.Basic.consume(chan, reply_queue, self(), no_ack: true),
          # Get notifications when the chan or conn go down
          Process.monitor(chan.pid) do
-      {:ok, %{channel: chan, reply_queue: reply_queue, correlation_id: 0, pending_reqs: %{}}}
+      {:ok, %{channel: chan, reply_queue: reply_queue, pending_reqs: %{}}}
     else
       {:error, reason} ->
         Logger.warn("RabbitMQ Connection error: " <> inspect(reason))
@@ -142,6 +140,11 @@ defmodule Astarte.RPC.AMQP.Client do
         retry_connection_after(@connection_backoff)
         {:ok, :not_connected}
     end
+  end
+
+  defp gen_correlation_id do
+    :crypto.strong_rand_bytes(16)
+    |> Base.encode64(padding: false)
   end
 
   defp maybe_reply(nil, _reply) do
