@@ -17,156 +17,149 @@
 #
 
 defmodule Astarte.RPC.AMQP.Client do
+  require Logger
+  use GenServer
+  alias Astarte.RPC.Config
 
-  defmacro __using__(opts) do
-    target_module = __CALLER__.module
+  @connection_backoff 10000
 
-    name = Keyword.get(opts, :name, target_module)
+  @behaviour Astarte.RPC.Client
 
-    quote location: :keep do
-      require Logger
-      use GenServer
-      alias Astarte.RPC.Config
+  # API
 
-      @connection_backoff 10000
+  def start_link(args \\ []) do
+    GenServer.start_link(__MODULE__, args, name: __MODULE__)
+  end
 
-      @behaviour Astarte.RPC.Client
+  def rpc_call(ser_payload, timeout \\ 5000) when is_binary(ser_payload) do
+    GenServer.call(__MODULE__, {:rpc, ser_payload}, timeout)
+  end
 
-      def start_link(args \\ []) do
-        GenServer.start_link(__MODULE__, args, name: unquote(name))
-      end
+  def rpc_cast(ser_payload) when is_binary(ser_payload) do
+    GenServer.cast(__MODULE__, {:rpc, ser_payload})
+  end
 
-      def init(_opts) do
-        {:ok, state} = rabbitmq_connect(false)
-      end
+  # Callbacks
 
-      def rpc_call(ser_payload, timeout \\ 5000) when is_binary(ser_payload) do
-        GenServer.call(unquote(name), {:rpc, ser_payload}, timeout)
-      end
+  def init(_opts) do
+    {:ok, state} = rabbitmq_connect(false)
+  end
 
-      def rpc_cast(ser_payload) when is_binary(ser_payload) do
-        GenServer.cast(unquote(name), {:rpc, ser_payload})
-      end
+  def terminate(_reason, %AMQP.Channel{conn: conn} = chan) do
+    AMQP.Channel.close(chan)
+    AMQP.Connection.close(conn)
+  end
 
-      def terminate(_reason, %AMQP.Channel{conn: conn} = chan) do
-        AMQP.Channel.close(chan)
-        AMQP.Connection.close(conn)
-      end
+  def handle_call({:rpc, ser_payload}, from, state) do
+    %{
+      channel: chan,
+      reply_queue: reply_queue,
+      correlation_id: correlation_id,
+      pending_reqs: pending
+    } = state
 
-      defp rabbitmq_connect(retry \\ true) do
-        with {:ok, conn} <- AMQP.Connection.open(Config.amqp_options()),
-             # Get notifications when the connection goes down
-             Process.monitor(conn.pid),
-             {:ok, chan} <- AMQP.Channel.open(conn),
-             :ok <- AMQP.Basic.qos(chan, prefetch_count: Config.amqp_prefetch_count()),
-             {:ok, %{queue: reply_queue}} <- AMQP.Queue.declare(chan, "", exclusive: true, auto_delete: true),
-             {:ok, _consumer_tag} <- AMQP.Basic.consume(chan, reply_queue, self(), no_ack: true) do
+    correlation_id_str = Integer.to_string(correlation_id)
 
-          {:ok, %{channel: chan,
-                  reply_queue: reply_queue,
-                  correlation_id: 0,
-                  pending_reqs: %{}}}
+    AMQP.Basic.publish(
+      chan,
+      "",
+      Config.amqp_queue!(),
+      ser_payload,
+      reply_to: reply_queue,
+      correlation_id: correlation_id_str
+    )
 
-        else
-          {:error, reason} ->
-            Logger.warn("RabbitMQ Connection error: " <> inspect(reason))
-            maybe_retry(retry)
-          :error ->
-            Logger.warn("Unknown RabbitMQ connection error")
-            maybe_retry(retry)
-        end
-      end
+    {:noreply,
+     %{
+       channel: chan,
+       reply_queue: reply_queue,
+       correlation_id: correlation_id + 1,
+       pending_reqs: Map.put(pending, correlation_id_str, from)
+     }}
+  end
 
-      defp maybe_retry(retry) do
-        if retry do
-          Logger.warn("Retrying connection in #{@connection_backoff} ms")
-          :erlang.send_after(@connection_backoff, :erlang.self(), {:try_to_connect})
-          {:ok, :not_connected}
-        else
-          {:stop, :connection_failed}
-        end
-      end
+  def handle_cast({:rpc, ser_payload}, %{channel: chan} = state) do
+    AMQP.Basic.publish(chan, "", Config.amqp_queue!(), ser_payload)
+    {:noreply, state}
+  end
 
-      # Server callbacks
+  def handle_info({:try_to_connect}, state) do
+    {:ok, new_state} = rabbitmq_connect()
+    {:noreply, new_state}
+  end
 
-      def handle_info({:try_to_connect}, state) do
-        {:ok, new_state} = rabbitmq_connect()
-        {:noreply, new_state}
-      end
+  # This callback should try to reconnect to the server
+  def handle_info({:DOWN, _, :process, _pid, _reason}, _state) do
+    Logger.warn("RabbitMQ connection lost. Trying to reconnect...")
+    {:ok, new_state} = rabbitmq_connect()
+    {:noreply, new_state}
+  end
 
+  # Confirmation sent by the broker after registering this process as a consumer
+  def handle_info({:basic_consume_ok, %{consumer_tag: _consumer_tag}}, state) do
+    {:noreply, state}
+  end
 
-      # This callback should try to reconnect to the server
-      def handle_info({:DOWN, _, :process, _pid, _reason}, _state) do
-        Logger.warn("RabbitMQ connection lost. Trying to reconnect...")
-        {:ok, new_state} = rabbitmq_connect()
-        {:noreply, new_state}
-      end
+  # Sent by the broker when the consumer is unexpectedly cancelled (such as after a queue deletion)
+  def handle_info({:basic_cancel, %{consumer_tag: _consumer_tag}}, state) do
+    {:stop, :normal, state}
+  end
 
-      # Confirmation sent by the broker after registering this process as a consumer
-      def handle_info({:basic_consume_ok, %{consumer_tag: _consumer_tag}}, state) do
-        {:noreply, state}
-      end
+  # Confirmation sent by the broker to the consumer process after a Basic.cancel
+  def handle_info({:basic_cancel_ok, %{consumer_tag: _consumer_tag}}, state) do
+    {:noreply, state}
+  end
 
-      # Sent by the broker when the consumer is unexpectedly cancelled (such as after a queue deletion)
-      def handle_info({:basic_cancel, %{consumer_tag: _consumer_tag}}, state) do
-        {:stop, :normal, state}
-      end
+  def handle_info(
+        {:basic_deliver, ser_reply, %{correlation_id: deliver_correlation_id}},
+        %{pending_reqs: pending} = state
+      ) do
+    Map.get(pending, deliver_correlation_id)
+    |> maybe_reply(ser_reply)
 
-      # Confirmation sent by the broker to the consumer process after a Basic.cancel
-      def handle_info({:basic_cancel_ok, %{consumer_tag: _consumer_tag}}, state) do
-        {:noreply, state}
-      end
+    {:noreply, %{state | pending_reqs: Map.delete(pending, deliver_correlation_id)}}
+  end
 
-      def handle_info({:basic_deliver, ser_reply, %{correlation_id: deliver_correlation_id}}, %{pending_reqs: pending} = state) do
-        Map.get(pending, deliver_correlation_id)
-        |> maybe_reply(ser_reply)
+  defp rabbitmq_connect(retry \\ true) do
+    with {:ok, conn} <- AMQP.Connection.open(Config.amqp_options()),
+         # Get notifications when the connection goes down
+         Process.monitor(conn.pid),
+         {:ok, chan} <- AMQP.Channel.open(conn),
+         :ok <- AMQP.Basic.qos(chan, prefetch_count: Config.amqp_prefetch_count()),
+         {:ok, %{queue: reply_queue}} <-
+           AMQP.Queue.declare(chan, "", exclusive: true, auto_delete: true),
+         {:ok, _consumer_tag} <- AMQP.Basic.consume(chan, reply_queue, self(), no_ack: true) do
+      {:ok, %{channel: chan, reply_queue: reply_queue, correlation_id: 0, pending_reqs: %{}}}
+    else
+      {:error, reason} ->
+        Logger.warn("RabbitMQ Connection error: " <> inspect(reason))
+        maybe_retry(retry)
 
-        {:noreply, %{state | pending_reqs: Map.delete(pending, deliver_correlation_id)}}
-      end
+      :error ->
+        Logger.warn("Unknown RabbitMQ connection error")
+        maybe_retry(retry)
+    end
+  end
 
-      def maybe_reply(nil, _reply) do
-        :ok
-      end
+  defp maybe_retry(retry) do
+    if retry do
+      Logger.warn("Retrying connection in #{@connection_backoff} ms")
+      :erlang.send_after(@connection_backoff, :erlang.self(), {:try_to_connect})
+      {:ok, :not_connected}
+    else
+      {:stop, :connection_failed}
+    end
+  end
 
-      def maybe_reply(caller, "error:" <> reply) do
-        GenServer.reply(caller, {:error, reply})
-      end
+  defp maybe_reply(nil, _reply) do
+    :ok
+  end
 
-      def maybe_reply(caller, ok_reply) do
-        GenServer.reply(caller, {:ok, ok_reply})
-      end
+  defp maybe_reply(caller, "error:" <> reply) do
+    GenServer.reply(caller, {:error, reply})
+  end
 
-      def handle_call({:rpc, ser_payload}, from, state) do
-        %{channel: chan,
-          reply_queue: reply_queue,
-          correlation_id: correlation_id,
-          pending_reqs: pending} = state
-
-        correlation_id_str = Integer.to_string(correlation_id)
-
-        AMQP.Basic.publish(chan,
-                           "",
-                           Config.amqp_queue!(),
-                           ser_payload,
-                           reply_to: reply_queue,
-                           correlation_id: correlation_id_str)
-
-        {:noreply, %{channel: chan,
-                     reply_queue: reply_queue,
-                     correlation_id: correlation_id + 1,
-                     pending_reqs: Map.put(pending, correlation_id_str, from)}}
-
-      end
-
-      def handle_cast({:rpc, ser_payload}, %{channel: chan} = state) do
-        AMQP.Basic.publish(chan,
-                           "",
-                           Config.amqp_queue!(),
-                           ser_payload)
-        {:noreply, state}
-      end
-
-    end # quote
-  end # defmacro
-
+  defp maybe_reply(caller, ok_reply) do
+    GenServer.reply(caller, {:ok, ok_reply})
+  end
 end
