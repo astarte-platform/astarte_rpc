@@ -31,12 +31,12 @@ defmodule Astarte.RPC.AMQP.Client do
     GenServer.start_link(__MODULE__, args, name: __MODULE__)
   end
 
-  def rpc_call(ser_payload, timeout \\ 5000) when is_binary(ser_payload) do
-    GenServer.call(__MODULE__, {:rpc, ser_payload}, timeout)
+  def rpc_call(ser_payload, destination, timeout \\ 5000) when is_binary(ser_payload) do
+    GenServer.call(__MODULE__, {:rpc, ser_payload, destination}, timeout)
   end
 
-  def rpc_cast(ser_payload) when is_binary(ser_payload) do
-    GenServer.cast(__MODULE__, {:rpc, ser_payload})
+  def rpc_cast(ser_payload, destination) when is_binary(ser_payload) do
+    GenServer.cast(__MODULE__, {:rpc, ser_payload, destination})
   end
 
   # Callbacks
@@ -59,23 +59,25 @@ defmodule Astarte.RPC.AMQP.Client do
     AMQP.Connection.close(conn)
   end
 
-  def handle_call({:rpc, _routing_key, _ser_payload}, _from, %{channel: nil} = state) do
+  def handle_call({:rpc, _ser_payload, _routing_key}, _from, %{channel: nil} = state) do
     {:reply, {:error, :retry}, state}
   end
 
-  def handle_call({:rpc, ser_payload}, from, state) do
+  def handle_call({:rpc, ser_payload, routing_key}, from, state) do
     %{
       channel: chan,
       reply_queue: reply_queue,
-      pending_reqs: pending
+      pending_reqs: pending,
+      prefix: prefix
     } = state
 
     correlation_id = gen_correlation_id()
+    prefixed_routing_key = prefix <> routing_key
 
     AMQP.Basic.publish(
       chan,
       "",
-      Config.amqp_queue!(),
+      prefixed_routing_key,
       ser_payload,
       reply_to: reply_queue,
       correlation_id: correlation_id
@@ -89,13 +91,20 @@ defmodule Astarte.RPC.AMQP.Client do
      }}
   end
 
-  def handle_cast({:rpc, _routing_key, ser_payload}, %{channel: nil} = state) do
+  def handle_cast({:rpc, ser_payload, _routing_key}, %{channel: nil} = state) do
     Logger.warn("RPC cast while not connected: #{inspect(ser_payload)}")
     {:noreply, state}
   end
 
-  def handle_cast({:rpc, ser_payload}, %{channel: chan} = state) do
-    AMQP.Basic.publish(chan, "", Config.amqp_queue!(), ser_payload)
+  def handle_cast({:rpc, ser_payload, routing_key}, state) do
+    %{
+      channel: chan,
+      prefix: prefix
+    } = state
+
+    prefixed_routing_key = prefix <> routing_key
+
+    AMQP.Basic.publish(chan, "", prefixed_routing_key, ser_payload)
     {:noreply, state}
   end
 
