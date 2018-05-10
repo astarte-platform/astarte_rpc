@@ -7,21 +7,25 @@ defmodule Astarte.RPC.AMQPTestEvalServer do
   result if it's a `call` or it just prints the result if it's a `cast`.
   """
 
-  use Astarte.RPC.AMQPServer,
-    queue: @test_queue,
-    amqp_options: Application.get_env(:astarte_rpc, :amqp_connection, [])
+  alias Astarte.RPC.AMQP.Server
 
-  def process_rpc("cast:" <> payload) do
+  @behaviour Astarte.RPC.Handler
+
+  def start_link do
+    Server.start_link(amqp_queue: @test_queue, handler: __MODULE__)
+  end
+
+  def handle_rpc("cast:" <> payload) do
     {value, _bindings} = Code.eval_string(payload)
     IO.puts("#{value}")
     :ok
   end
 
-  def process_rpc("call:invalid") do
+  def handle_rpc("call:invalid") do
     {:error, "custom error reason"}
   end
 
-  def process_rpc("call:" <> payload) do
+  def handle_rpc("call:" <> payload) do
     {value, _bindings} = Code.eval_string(payload)
     {:ok, to_string(value)}
   end

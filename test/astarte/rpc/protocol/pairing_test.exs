@@ -1,7 +1,8 @@
 defmodule Astarte.RPC.Protocol.PairingTest do
   use ExUnit.Case
 
-  use Astarte.RPC.Protocol.Pairing
+  alias Astarte.RPC.Protocol.Pairing.Reply
+  alias Astarte.RPC.Protocol.Pairing.VerifyCertificateReply
 
   test "RealmManagement Protobuf round trip" do
     verify_cert_reply =
