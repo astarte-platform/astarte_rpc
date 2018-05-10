@@ -18,7 +18,25 @@
 
 defmodule Astarte.RPC.Protocol do
   @moduledoc """
+  This is a utility module to inject an amqp_queue function that returns the amqp
+  queue for a specific RPC protocol. This is useful to make sure that the client and
+  the server are synchronized.
   """
-  defmacro __using__(_opts) do
+  defmacro __using__(opts) do
+    case Keyword.fetch(opts, :amqp_queue) do
+      :error ->
+        IO.warn("No amqp_queue set in use options", Macro.Env.stacktrace(__ENV__))
+
+      {:ok, queue} ->
+        inject_amqp_queue_fun(queue)
+    end
+  end
+
+  defp inject_amqp_queue_fun(queue) do
+    quote do
+      def amqp_queue do
+        unquote(queue)
+      end
+    end
   end
 end
