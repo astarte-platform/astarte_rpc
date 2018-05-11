@@ -10,6 +10,8 @@ defmodule Astarte.RPC.AMQPTest do
     AMQP.Queue.declare(chan, @test_queue)
     Astarte.RPC.AMQPTestEvalServer.start_link()
     Astarte.RPC.AMQPTestClient.start_link()
+    # Wait for async connection
+    :timer.sleep(1000)
     :ok
   end
 
