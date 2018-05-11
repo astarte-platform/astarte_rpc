@@ -16,27 +16,15 @@
 # along with Astarte.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-defmodule Astarte.RPC.Protocol do
+defmodule Astarte.RPC.Handler do
   @moduledoc """
-  This is a utility module to inject an amqp_queue function that returns the amqp
-  queue for a specific RPC protocol. This is useful to make sure that the client and
-  the server are synchronized.
+  This module defines the Astarte RPC Handler behaviour.
+
+  This must be implemented by modules that will be called from RPC Server.
   """
-  defmacro __using__(opts) do
-    case Keyword.fetch(opts, :amqp_queue) do
-      :error ->
-        IO.warn("No amqp_queue set in use options", Macro.Env.stacktrace(__ENV__))
-
-      {:ok, queue} ->
-        inject_amqp_queue_fun(queue)
-    end
-  end
-
-  defp inject_amqp_queue_fun(queue) do
-    quote do
-      def amqp_queue do
-        unquote(queue)
-      end
-    end
-  end
+  @callback handle_rpc(payload :: binary) ::
+    :ok |
+    {:ok, reply :: term} |
+    {:error, :retry} |
+    {:error, reason :: term}
 end

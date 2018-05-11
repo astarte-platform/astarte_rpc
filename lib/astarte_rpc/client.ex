@@ -23,12 +23,16 @@ defmodule Astarte.RPC.Client do
   Its responsibility is delivering the serialized request to the RPC server and delivering
   the serialized reply to the caller (if needed).
   """
-  @callback rpc_call(serialized_request :: binary()) ::
+  @callback rpc_call(serialized_request :: binary(), destination :: term()) ::
               {:ok, serialized_reply :: binary()}
               | {:error, reason :: term()}
-  @callback rpc_call(serialized_request :: binary(), timeout :: integer()) ::
+  @callback rpc_call(
+              serialized_request :: binary(),
+              destination :: term(),
+              timeout :: integer()
+            ) ::
               {:ok, serialized_reply :: binary()}
               | {:error, reason :: term()}
 
-  @callback rpc_cast(serialized_request :: binary()) :: :ok
+  @callback rpc_cast(serialized_request :: binary(), destination :: term()) :: :ok
 end
