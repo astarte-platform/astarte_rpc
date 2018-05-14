@@ -160,7 +160,7 @@ defmodule Astarte.RPC.AMQP.Server do
   end
 
   defp maybe_reply(reply, _chan, :undefined, _correlation_id) do
-    Logger.warn("Got a reply but no queue to write it to: #{reply}")
+    Logger.warn("Got a reply but no queue to write it to: #{inspect(reply)}")
   end
 
   defp maybe_reply({:ok, reply}, chan, reply_to, correlation_id) do
