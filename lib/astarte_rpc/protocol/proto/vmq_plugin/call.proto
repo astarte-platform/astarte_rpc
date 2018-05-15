@@ -2,6 +2,7 @@ message Call {
     int32 version = 1 [default = 1];
 
     oneof call {
+        Disconnect disconnect = 3;
         Publish publish = 2;
     }
 }
