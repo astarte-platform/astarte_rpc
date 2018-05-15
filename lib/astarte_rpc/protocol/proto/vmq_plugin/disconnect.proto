@@ -1,0 +1,4 @@
+message Disconnect {
+    string client_id = 1;
+    bool discard_state = 2;
+}
