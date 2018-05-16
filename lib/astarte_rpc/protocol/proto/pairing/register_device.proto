@@ -1,4 +1,4 @@
-message GenerateAPIKey {
+message RegisterDevice {
     string hw_id = 1;
     string realm = 2;
 }

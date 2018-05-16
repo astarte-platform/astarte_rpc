@@ -1,0 +1,3 @@
+message RegisterDeviceReply {
+    string api_key = 1;
+}
