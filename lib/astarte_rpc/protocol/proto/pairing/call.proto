@@ -5,7 +5,7 @@ message Call {
         GetCredentials get_credentials = 4;
         GetInfo get_info = 2;
         RegisterDevice register_device = 3;
-        VerifyCertificate verify_certificate = 5;
+        VerifyCredentials verify_credentials = 5;
     }
 }
 

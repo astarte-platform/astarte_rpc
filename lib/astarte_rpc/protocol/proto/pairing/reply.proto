@@ -8,6 +8,6 @@ message Reply {
         GenericErrorReply generic_error_reply = 4;
         GetInfoReply get_info_reply = 5;
         RegisterDeviceReply register_device_reply = 6;
-        VerifyCertificateReply verify_certificate_reply = 8;
+        VerifyCredentialsReply verify_credentials_reply = 8;
     }
 }
