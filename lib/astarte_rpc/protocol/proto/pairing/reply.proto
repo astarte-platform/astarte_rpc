@@ -3,11 +3,11 @@ message Reply {
     bool error = 2 [default = false];
 
     oneof reply {
+        GetCredentialsReply get_credentials_reply = 7;
         GenericOkReply generic_ok_reply = 3;
         GenericErrorReply generic_error_reply = 4;
         GetInfoReply get_info_reply = 5;
-        GenerateAPIKeyReply generate_api_key_reply = 6;
-        DoPairingReply do_pairing_reply = 7;
-        VerifyCertificateReply verify_certificate_reply = 8;
+        RegisterDeviceReply register_device_reply = 6;
+        VerifyCredentialsReply verify_credentials_reply = 8;
     }
 }
