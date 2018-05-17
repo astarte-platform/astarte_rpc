@@ -2,9 +2,9 @@ message Call {
     int32 version = 1 [default = 1];
 
     oneof call {
+        GetCredentials get_credentials = 4;
         GetInfo get_info = 2;
         RegisterDevice register_device = 3;
-        DoPairing do_pairing = 4;
         VerifyCertificate verify_certificate = 5;
     }
 }
