@@ -1,0 +1,3 @@
+message AstarteMQTTV1Status {
+    string broker_url = 1;
+}

@@ -1,18 +1,25 @@
 defmodule Astarte.RPC.Protocol.PairingTest do
   use ExUnit.Case
 
+  alias Astarte.RPC.Protocol.Pairing.AstarteMQTTV1CredentialsStatus
   alias Astarte.RPC.Protocol.Pairing.Reply
   alias Astarte.RPC.Protocol.Pairing.VerifyCredentialsReply
 
   test "Pairing Protobuf round trip" do
-    verify_credentials_reply =
-      %VerifyCredentialsReply{
+    astarte_credentials_status =
+      %AstarteMQTTV1CredentialsStatus{
         valid: false,
         timestamp: 123456123456,
         until: 654321654321,
         cause: :INVALID_SIGNATURE,
         details: "Not trusted"
       }
+
+    verify_credentials_reply =
+      %VerifyCredentialsReply{
+        credentials_status: {:astarte_mqtt_v1, astarte_credentials_status}
+      }
+
     version = 1
 
     rpc_reply =

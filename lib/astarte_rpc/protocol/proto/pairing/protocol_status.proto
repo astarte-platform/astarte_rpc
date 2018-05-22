@@ -1,0 +1,5 @@
+message ProtocolStatus {
+    oneof status {
+        AstarteMQTTV1Status astarte_mqtt_v1 = 1;
+    }
+}

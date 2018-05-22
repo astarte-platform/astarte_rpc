@@ -28,9 +28,6 @@ use Mix.Config
 # here (which is why it is important to import them last).
 #
 
-config :lager,
-  handlers: [level: :critical]
-
 config :astarte_rpc, :amqp_prefetch_count,
   300
 
