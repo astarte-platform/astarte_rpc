@@ -1,0 +1,3 @@
+message GetJWTPublicKeyPEM {
+    string realm = 1;
+}

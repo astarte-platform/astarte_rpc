@@ -4,6 +4,7 @@ message Call {
     oneof call {
         GetCredentials get_credentials = 4;
         GetInfo get_info = 2;
+        GetJWTPublicKeyPEM get_jwt_public_key_pem = 6;
         RegisterDevice register_device = 3;
         VerifyCredentials verify_credentials = 5;
     }

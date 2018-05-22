@@ -7,6 +7,7 @@ message Reply {
         GenericOkReply generic_ok_reply = 3;
         GenericErrorReply generic_error_reply = 4;
         GetInfoReply get_info_reply = 5;
+        GetJWTPublicKeyPEMReply get_jwt_public_key_pem_reply = 9;
         RegisterDeviceReply register_device_reply = 6;
         VerifyCredentialsReply verify_credentials_reply = 8;
     }
