@@ -1,4 +1,5 @@
 message GetInfoReply {
-    string url = 1;
-    string version = 2;
+    string version = 1;
+    string device_status = 2;
+    repeated ProtocolStatus protocols = 3;
 }
