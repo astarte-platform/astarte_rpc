@@ -1,2 +1,5 @@
 message GetInfo {
+    string realm = 1;
+    string hw_id = 2;
+    string secret = 3;
 }
