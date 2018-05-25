@@ -1,0 +1,3 @@
+message GetAgentPublicKeyPEMsReply {
+    repeated string jwt_public_key_pems = 1;
+}
