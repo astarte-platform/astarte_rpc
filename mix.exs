@@ -31,10 +31,10 @@ defmodule Astarte.RPC.Mixfile do
   # Type "mix help deps" for more examples and options
   defp deps do
     [
-      {:amqp, "~> 1.0.0-pre.1"},
-      {:exprotobuf, "~> 1.2.7"},
-      {:distillery, "~> 1.4", runtime: false},
-      {:conform, "~> 2.2"},
+      {:amqp, "== 1.0.2"},
+      {:exprotobuf, "== 1.2.9"},
+      {:distillery, "== 1.5.2", runtime: false},
+      {:conform, "== 2.5.2"},
 
       {:excoveralls, "~> 0.6", only: :test}
     ]
