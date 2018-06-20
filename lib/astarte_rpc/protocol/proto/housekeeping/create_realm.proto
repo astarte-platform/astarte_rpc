@@ -2,4 +2,5 @@ message CreateRealm {
     string realm = 1;
     bool async_operation = 2 [default = false];
     string jwt_public_key_pem = 3;
+    int32 replication_factor = 4;
 }
