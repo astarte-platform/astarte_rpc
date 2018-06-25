@@ -35,8 +35,7 @@ defmodule Astarte.RPC.Mixfile do
       {:exprotobuf, "== 1.2.9"},
       {:distillery, "== 1.5.2", runtime: false},
       {:conform, "== 2.5.2"},
-
-      {:excoveralls, "~> 0.6", only: :test}
+      {:excoveralls, "== 0.8.2", only: :test}
     ]
   end
 end
