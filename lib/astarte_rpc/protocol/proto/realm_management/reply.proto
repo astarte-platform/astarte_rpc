@@ -11,5 +11,6 @@ message Reply {
         GetJWTPublicKeyPEMReply get_jwt_public_key_pem_reply = 8;
         GetTriggerReply get_trigger_reply = 9;
         GetTriggersListReply get_triggers_list_reply = 10;
+        GetHealthReply get_health_reply = 11;
     }
 }

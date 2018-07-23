@@ -14,5 +14,6 @@ message Call {
         GetTrigger get_trigger = 11;
         GetTriggersList get_triggers_list = 12;
         DeleteTrigger delete_trigger = 13;
+        GetHealth get_health = 14;
     }
 }
