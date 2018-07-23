@@ -5,4 +5,6 @@ message GetHealthReply {
         BAD = 3;
         ERROR = 4;
     }
+
+    Status status = 1;
 }
