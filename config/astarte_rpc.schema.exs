@@ -110,6 +110,16 @@ See the moduledoc for `Conform.Schema.Validator` for more details and examples.
       hidden: false,
       required: true,
       to: "astarte_rpc.amqp_prefetch_count"
+    ],
+    "astarte_rpc.amqp_queue_max_length": [
+      commented: true,
+      datatype: :integer,
+      env_var: "ASTARTE_RPC_AMQP_QUEUE_MAX_LENGTH",
+      doc:
+        "Max length of the server AMQP queue. If defined, the queue will be limited to that length and new publishes will be dropped while the queue is full. WARNING: changing this value requires manually deleting the queue",
+      hidden: false,
+      required: false,
+      to: "astarte_rpc.amqp_queue_max_length"
     ]
  ],
  transforms: [],

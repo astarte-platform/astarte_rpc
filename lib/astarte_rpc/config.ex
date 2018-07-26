@@ -35,4 +35,12 @@ defmodule Astarte.RPC.Config do
   def amqp_prefetch_count do
     Application.get_env(:astarte_rpc, :amqp_prefetch_count, 300)
   end
+
+  def amqp_queue_arguments do
+    if max_length = Application.get_env(:astarte_rpc, :amqp_queue_max_length) do
+      [{:"x-max-length", max_length}, {:"x-overflow", "reject-publish"}]
+    else
+      []
+    end
+  end
 end
