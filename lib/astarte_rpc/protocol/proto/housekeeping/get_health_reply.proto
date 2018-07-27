@@ -1,0 +1,10 @@
+message GetHealthReply {
+    enum Status {
+        READY = 1;
+        DEGRADED = 2;
+        BAD = 3;
+        ERROR = 4;
+    }
+
+    Status status = 1;
+}
