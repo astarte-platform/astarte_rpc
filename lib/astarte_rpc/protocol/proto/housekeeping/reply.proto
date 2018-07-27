@@ -8,5 +8,6 @@ message Reply {
         DoesRealmExistReply does_realm_exist_reply = 4;
         GetRealmsListReply get_realms_list_reply = 6;
         GetRealmReply get_realm_reply = 7;
+        GetHealthReply get_health_reply = 8;
     }
 }
