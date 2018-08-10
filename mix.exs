@@ -15,7 +15,11 @@ defmodule Astarte.RPC.Mixfile do
         "coveralls.post": :test,
         "coveralls.html": :test
       ],
-      deps: deps()
+      description: description(),
+      package: package(),
+      deps: deps(),
+      source_url: "https://github.com/astarte-platform/astarte_rpc",
+      homepage_url: "https://astarte-platform.org/"
     ]
   end
 
@@ -45,4 +49,24 @@ defmodule Astarte.RPC.Mixfile do
       {:excoveralls, "== 0.9.1", only: :test}
     ]
   end
+
+  defp description do
+    """
+    Astarte platform shared Protocol Buffers .proto files and Elixir AMQP client code.
+    This component is one of the core components and basically is required to allow communication between different Astarte blocks.
+    """
+  end
+
+  defp package do
+    [
+      maintainers: ["Davide Bettio", "Riccardo Binetti"],
+      licenses: ["LGPL-3.0-or-later"],
+      links: %{
+        "Astarte" => "https://astarte-platform.org",
+        "Ispirata" => "https://ispirata.com",
+        "GitHub" => "https://github.com/astarte-platform/astarte_rpc"
+      }
+    ]
+  end
+
 end
