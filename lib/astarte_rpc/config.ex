@@ -38,6 +38,7 @@ defmodule Astarte.RPC.Config do
 
   def amqp_queue_arguments do
     max_length = Application.get_env(:astarte_rpc, :amqp_queue_max_length)
+
     if is_integer(max_length) and max_length > 0 do
       [{:"x-max-length", max_length}, {:"x-overflow", "reject-publish"}]
     else
