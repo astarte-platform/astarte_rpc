@@ -23,8 +23,8 @@ defmodule Astarte.RPC.Handler do
   This must be implemented by modules that will be called from RPC Server.
   """
   @callback handle_rpc(payload :: binary) ::
-    :ok |
-    {:ok, reply :: term} |
-    {:error, :retry} |
-    {:error, reason :: term}
+              :ok
+              | {:ok, reply :: term}
+              | {:error, :retry}
+              | {:error, reason :: term}
 end
