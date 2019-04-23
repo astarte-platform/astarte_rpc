@@ -86,5 +86,4 @@ defmodule Astarte.RPC.Mixfile do
       }
     ]
   end
-
 end
