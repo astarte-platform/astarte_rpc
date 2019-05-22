@@ -23,7 +23,7 @@ defmodule Astarte.RPC.Mixfile do
     [
       app: :astarte_rpc,
       version: "0.11.0-dev",
-      elixir: "~> 1.4",
+      elixir: "~> 1.8",
       build_embedded: Mix.env() == :prod,
       start_permanent: Mix.env() == :prod,
       test_coverage: [tool: ExCoveralls],
@@ -46,7 +46,7 @@ defmodule Astarte.RPC.Mixfile do
   # Type "mix help compile.app" for more information
   def application do
     # Specify extra applications you'll use from Erlang/Elixir
-    [extra_applications: [:logger]]
+    [extra_applications: [:lager, :logger, :amqp]]
   end
 
   # Dependencies can be Hex packages:
@@ -60,11 +60,11 @@ defmodule Astarte.RPC.Mixfile do
   # Type "mix help deps" for more examples and options
   defp deps do
     [
-      {:amqp, "== 1.0.2"},
-      {:exprotobuf, "== 1.2.9"},
-      {:distillery, "== 1.5.2", runtime: false},
+      {:amqp, "~> 1.0"},
+      {:exprotobuf, "~> 1.2"},
+      {:distillery, "~> 1.5", runtime: false},
       {:conform, "== 2.5.2"},
-      {:excoveralls, "== 0.9.1", only: :test}
+      {:excoveralls, "~> 0.10", only: :test}
     ]
   end
 
