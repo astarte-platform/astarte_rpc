@@ -1,7 +1,7 @@
 //
 // This file is part of Astarte.
 //
-// Copyright 2017 Ispirata Srl
+// Copyright 2019 Ispirata Srl
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -16,8 +16,8 @@
 // limitations under the License.
 //
 
-message RegisterDevice {
-    string hw_id = 1;
-    string realm = 2;
-    repeated IntrospectionEntry initial_introspection = 3;
+message IntrospectionEntry {
+    string interface_name = 1;
+    int32 major_version = 2;
+    int32 minor_version = 3;
 }
