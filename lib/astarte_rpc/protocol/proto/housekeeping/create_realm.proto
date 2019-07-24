@@ -21,4 +21,6 @@ message CreateRealm {
     bool async_operation = 2 [default = false];
     string jwt_public_key_pem = 3;
     int32 replication_factor = 4;
+    ReplicationClass replication_class = 5;
+    map<string, int32> datacenter_replication_factors = 6;
 }
