@@ -1,7 +1,7 @@
 //
 // This file is part of Astarte.
 //
-// Copyright 2017 Ispirata Srl
+// Copyright 2019 Ispirata Srl
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -16,10 +16,7 @@
 // limitations under the License.
 //
 
-message GetRealmReply {
-    string realm_name = 1;
-    string jwt_public_key_pem = 2;
-    int32 replication_factor = 3;
-    ReplicationClass replication_class = 4;
-    map<string, int32> datacenter_replication_factors = 5;
-}
+enum ReplicationClass {
+    SIMPLE_STRATEGY = 0;
+    NETWORK_TOPOLOGY_STRATEGY = 1;
+};
