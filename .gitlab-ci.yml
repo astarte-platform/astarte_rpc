@@ -21,9 +21,6 @@ mix:test-ci:
         - mix compile
         - mix coveralls
         - mix format --check-formatted
-    cache:
-        paths:
-            - deps
     except:
         - branches@Astarte-NG/astarte_rpc
 
@@ -40,9 +37,6 @@ mix:build:
         - mix coveralls
         - export MIX_ENV=dev
         - mix release
-    cache:
-        paths:
-            - deps
     only:
         - master@Astarte-NG/astarte_rpc
 
@@ -59,8 +53,5 @@ mix:release-build:
         - mix coveralls
         - export MIX_ENV=prod
         - mix release
-    cache:
-        paths:
-            - deps
     only:
         - tags@Astarte-NG/astarte_rpc
