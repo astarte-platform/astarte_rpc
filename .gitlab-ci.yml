@@ -1,56 +1,22 @@
 stages:
-    - build
-    - deploy
-
-before_script:
-    - mix local.hex --force
-    - mix local.rebar
+    - test
 
 variables:
     APPLICATION_NAME: astarte_rpc
 
-mix:test-ci:
+mix:test-coverage:
+    stage: test
     image: elixir:1.6.5
     services:
-        - rabbitmq:3.6
-    stage: build
-    script:
-        - export MIX_ENV=test
+        - rabbitmq:3.7.15
+    cache:
+        key: "$CI_COMMIT_REF_SLUG"
+        paths:
+            - deps
+            - _build
+    before_script:
+        - mix local.hex --force
+        - mix local.rebar
         - mix deps.get
-        - mix deps.compile
-        - mix compile
-        - mix coveralls
-    except:
-        - branches@Astarte-NG/astarte_rpc
-
-mix:build:
-    image: elixir:1.6.5
-    services:
-        - rabbitmq:3.6
-    stage: build
     script:
-        - export MIX_ENV=test
-        - mix deps.get
-        - mix deps.compile
-        - mix compile
         - mix coveralls
-        - export MIX_ENV=dev
-        - mix release
-    only:
-        - master@Astarte-NG/astarte_rpc
-
-mix:release-build:
-    image: elixir:1.6.5
-    services:
-        - rabbitmq:3.6
-    stage: build
-    script:
-        - export MIX_ENV=test
-        - mix deps.get
-        - mix deps.compile
-        - mix compile
-        - mix coveralls
-        - export MIX_ENV=prod
-        - mix release
-    only:
-        - tags@Astarte-NG/astarte_rpc
