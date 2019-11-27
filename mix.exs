@@ -35,6 +35,7 @@ defmodule Astarte.RPC.Mixfile do
       ],
       description: description(),
       package: package(),
+      dialyzer_cache_directory: dialyzer_cache_directory(Mix.env()),
       deps: deps(),
       source_url: "https://github.com/astarte-platform/astarte_rpc",
       homepage_url: "https://astarte-platform.org/"
@@ -47,6 +48,14 @@ defmodule Astarte.RPC.Mixfile do
   def application do
     # Specify extra applications you'll use from Erlang/Elixir
     [extra_applications: [:lager, :logger, :amqp]]
+  end
+
+  defp dialyzer_cache_directory(:ci) do
+    "dialyzer_cache"
+  end
+
+  defp dialyzer_cache_directory(_) do
+    nil
   end
 
   # Dependencies can be Hex packages:
@@ -64,7 +73,8 @@ defmodule Astarte.RPC.Mixfile do
       {:exprotobuf, "~> 1.2"},
       {:distillery, "~> 1.5", runtime: false},
       {:conform, "== 2.5.2"},
-      {:excoveralls, "~> 0.10", only: :test}
+      {:excoveralls, "~> 0.10", only: :test},
+      {:dialyzex, github: "Comcast/dialyzex", only: [:dev, :ci]}
     ]
   end
 
