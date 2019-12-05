@@ -1,7 +1,7 @@
 //
 // This file is part of Astarte.
 //
-// Copyright 2017 Ispirata Srl
+// Copyright 2019 Ispirata Srl
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -16,16 +16,7 @@
 // limitations under the License.
 //
 
-message Call {
-    int32 version = 1 [default = 1];
-
-    oneof call {
-        GetCredentials get_credentials = 4;
-        GetInfo get_info = 2;
-        GetAgentPublicKeyPEMs get_agent_public_key_pems = 6;
-        RegisterDevice register_device = 3;
-        VerifyCredentials verify_credentials = 5;
-        UnregisterDevice unregister_device = 7;
-    }
+message UnregisterDevice {
+    string realm = 1;
+    string device_id = 2;
 }
-
