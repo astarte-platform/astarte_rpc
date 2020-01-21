@@ -16,6 +16,8 @@
 // limitations under the License.
 //
 
+syntax = "proto3";
+
 message GetAgentPublicKeyPEMsReply {
     repeated string agent_public_key_pems = 1;
 }

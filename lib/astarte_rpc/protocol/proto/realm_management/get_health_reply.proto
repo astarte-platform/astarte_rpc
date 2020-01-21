@@ -16,12 +16,14 @@
 // limitations under the License.
 //
 
+syntax = "proto3";
+
 message GetHealthReply {
     enum Status {
-        READY = 1;
-        DEGRADED = 2;
-        BAD = 3;
-        ERROR = 4;
+        READY = 0;
+        DEGRADED = 1;
+        BAD = 2;
+        ERROR = 3;
     }
 
     Status status = 1;

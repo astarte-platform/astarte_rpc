@@ -16,6 +16,8 @@
 // limitations under the License.
 //
 
+syntax = "proto3";
+
 message Disconnect {
     string client_id = 1;
     bool discard_state = 2;

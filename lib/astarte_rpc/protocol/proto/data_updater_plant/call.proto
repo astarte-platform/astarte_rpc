@@ -16,8 +16,13 @@
 // limitations under the License.
 //
 
+syntax = "proto3";
+
+import "install_volatile_trigger.proto";
+import "delete_volatile_trigger.proto";
+
 message Call {
-    int32 version = 1 [default = 1];
+    int32 version = 1;
 
     oneof call {
         InstallVolatileTrigger install_volatile_trigger = 2;

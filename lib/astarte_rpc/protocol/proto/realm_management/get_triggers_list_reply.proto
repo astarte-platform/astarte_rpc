@@ -16,6 +16,8 @@
 // limitations under the License.
 //
 
+syntax = "proto3";
+
 message GetTriggersListReply {
    repeated string triggers_names = 1;
 }

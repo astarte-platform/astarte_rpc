@@ -16,9 +16,18 @@
 // limitations under the License.
 //
 
+syntax = "proto3";
+
+import "generic_ok_reply.proto";
+import "generic_error_reply.proto";
+import "does_realm_exist_reply.proto";
+import "get_realms_list_reply.proto";
+import "get_realm_reply.proto";
+import "get_health_reply.proto";
+
 message Reply {
-    int32 version = 1 [default = 1];
-    bool error = 2 [default = false];
+    int32 version = 1;
+    bool error = 2;
 
     oneof reply {
         GenericOkReply generic_ok_reply = 5;

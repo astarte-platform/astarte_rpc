@@ -16,6 +16,10 @@
 // limitations under the License.
 //
 
+syntax = "proto3";
+
+import "protocol_status.proto";
+
 message GetInfoReply {
     string version = 1;
     string device_status = 2;

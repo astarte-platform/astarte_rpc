@@ -16,6 +16,8 @@
 // limitations under the License.
 //
 
+syntax = "proto3";
+
 message GetInterfacesListReply {
    repeated string interfaces_names = 1;
 }

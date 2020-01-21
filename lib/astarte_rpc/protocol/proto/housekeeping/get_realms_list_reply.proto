@@ -16,6 +16,8 @@
 // limitations under the License.
 //
 
+syntax = "proto3";
+
 message GetRealmsListReply {
     repeated string realms_names = 1;
 }
