@@ -22,8 +22,8 @@ defmodule Astarte.RPC.Mixfile do
   def project do
     [
       app: :astarte_rpc,
-      version: "0.11.0-beta.2",
-      elixir: "~> 1.8",
+      version: "1.0.0-dev",
+      elixir: "~> 1.10",
       build_embedded: Mix.env() == :prod,
       start_permanent: Mix.env() == :prod,
       test_coverage: [tool: ExCoveralls],
@@ -69,7 +69,7 @@ defmodule Astarte.RPC.Mixfile do
   # Type "mix help deps" for more examples and options
   defp deps do
     [
-      {:amqp, "~> 1.2.1"},
+      {:amqp, "~> 1.2"},
       {:exprotobuf, "~> 1.2"},
       {:distillery, "~> 1.5", runtime: false},
       {:conform, "== 2.5.2"},
