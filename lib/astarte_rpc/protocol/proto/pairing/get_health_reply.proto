@@ -1,7 +1,7 @@
 //
 // This file is part of Astarte.
 //
-// Copyright 2017 Ispirata Srl
+// Copyright 2020 Ispirata Srl
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -16,18 +16,15 @@
 // limitations under the License.
 //
 
-message Reply {
-    int32 version = 1 [default = 1];
-    bool error = 2 [default = false];
+syntax = "proto3";
 
-    oneof reply {
-        GenericOkReply generic_ok_reply = 3;
-        GenericErrorReply generic_error_reply = 4;
-        GetAgentPublicKeyPEMsReply get_agent_public_key_pems_reply = 9;
-        GetCredentialsReply get_credentials_reply = 7;
-        GetHealthReply get_health_reply = 10;
-        GetInfoReply get_info_reply = 5;
-        RegisterDeviceReply register_device_reply = 6;
-        VerifyCredentialsReply verify_credentials_reply = 8;
+message GetHealthReply {
+    enum Status {
+        READY = 1;
+        DEGRADED = 2;
+        BAD = 3;
+        ERROR = 4;
     }
+
+    Status status = 1;
 }

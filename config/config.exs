@@ -8,9 +8,6 @@ config :lager,
   error_logger_redirect: false,
   handlers: [level: :critical]
 
-# make amqp supervisors logs less verbose
-config :logger, handle_otp_reports: false
-
 # This configuration is loaded before any dependency and is restricted
 # to this project. If another project depends on this project, this
 # file won't be loaded nor affect the parent project. For this reason,
@@ -37,7 +34,6 @@ config :logger, handle_otp_reports: false
 # here (which is why it is important to import them last).
 #
 
-config :astarte_rpc, :amqp_prefetch_count,
-  300
+config :astarte_rpc, :amqp_prefetch_count, 300
 
-import_config "#{Mix.env}.exs"
+import_config "#{Mix.env()}.exs"
