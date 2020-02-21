@@ -3,14 +3,14 @@ dist: bionic
 services:
   - docker
 elixir:
-  - 1.8.1
+  - 1.10.1
 otp_release:
-  - 21.3
+  - 22.2
 env:
   global:
     - RABBITMQ_HOST=localhost MIX_ENV=test
   jobs:
-    - RABBITMQ_VERSION=3.7.21
+    - RABBITMQ_VERSION=3.8.3-rc.1
 cache:
   directories:
     - deps
