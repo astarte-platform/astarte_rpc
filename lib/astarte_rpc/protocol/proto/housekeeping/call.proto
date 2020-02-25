@@ -16,8 +16,16 @@
 // limitations under the License.
 //
 
+syntax = "proto3";
+
+import "create_realm.proto";
+import "does_realm_exist.proto";
+import "get_realms_list.proto";
+import "get_realm.proto";
+import "get_health.proto";
+
 message Call {
-    int32 version = 1 [default = 1];
+    int32 version = 1;
 
     oneof call {
         CreateRealm create_realm = 2;

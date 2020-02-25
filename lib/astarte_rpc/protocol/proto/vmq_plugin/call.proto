@@ -16,8 +16,13 @@
 // limitations under the License.
 //
 
+syntax = "proto3";
+
+import "disconnect.proto";
+import "publish.proto";
+
 message Call {
-    int32 version = 1 [default = 1];
+    int32 version = 1;
 
     oneof call {
         Disconnect disconnect = 3;

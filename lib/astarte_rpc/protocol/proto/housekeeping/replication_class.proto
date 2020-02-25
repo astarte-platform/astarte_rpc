@@ -16,6 +16,8 @@
 // limitations under the License.
 //
 
+syntax = "proto3";
+
 enum ReplicationClass {
     SIMPLE_STRATEGY = 0;
     NETWORK_TOPOLOGY_STRATEGY = 1;

@@ -16,8 +16,10 @@
 // limitations under the License.
 //
 
+syntax = "proto3";
+
 message InstallInterface {
     string realm_name = 1;
     string interface_json = 2;
-    bool async_operation = 3  [default = false];
+    bool async_operation = 3;
 }

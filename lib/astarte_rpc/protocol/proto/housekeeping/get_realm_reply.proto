@@ -16,6 +16,10 @@
 // limitations under the License.
 //
 
+syntax = "proto3";
+
+import "replication_class.proto";
+
 message GetRealmReply {
     string realm_name = 1;
     string jwt_public_key_pem = 2;

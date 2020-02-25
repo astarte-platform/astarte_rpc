@@ -16,6 +16,8 @@
 // limitations under the License.
 //
 
+syntax = "proto3";
+
 message DoesRealmExist {
     string realm = 1;
 }
