@@ -16,6 +16,10 @@
 // limitations under the License.
 //
 
+syntax = "proto3";
+
+import "astarte_mqtt_v1_status.proto";
+
 message ProtocolStatus {
     oneof status {
         AstarteMQTTV1Status astarte_mqtt_v1 = 1;

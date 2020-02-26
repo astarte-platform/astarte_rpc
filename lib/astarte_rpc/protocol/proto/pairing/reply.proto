@@ -16,9 +16,19 @@
 // limitations under the License.
 //
 
+syntax = "proto3";
+
+import "get_credentials_reply.proto";
+import "generic_ok_reply.proto";
+import "generic_error_reply.proto";
+import "get_info_reply.proto";
+import "get_agent_public_key_pems_reply.proto";
+import "register_device_reply.proto";
+import "verify_credentials_reply.proto";
+
 message Reply {
-    int32 version = 1 [default = 1];
-    bool error = 2 [default = false];
+    int32 version = 1;
+    bool error = 2;
 
     oneof reply {
         GenericOkReply generic_ok_reply = 3;

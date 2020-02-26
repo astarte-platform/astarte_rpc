@@ -16,6 +16,8 @@
 // limitations under the License.
 //
 
+syntax = "proto3";
+
 message GenericOkReply {
-    bool async_operation = 1 [default = false];
+    bool async_operation = 1;
 }

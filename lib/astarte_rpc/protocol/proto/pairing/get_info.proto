@@ -16,6 +16,8 @@
 // limitations under the License.
 //
 
+syntax = "proto3";
+
 message GetInfo {
     string realm = 1;
     string hw_id = 2;

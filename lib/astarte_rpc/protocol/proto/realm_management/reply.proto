@@ -16,9 +16,22 @@
 // limitations under the License.
 //
 
+syntax = "proto3";
+
+import "generic_ok_reply.proto";
+import "generic_error_reply.proto";
+import "get_interface_source_reply.proto";
+import "get_interface_versions_list_reply.proto";
+import "get_interfaces_list_reply.proto";
+import "get_jwt_public_key_pem_reply.proto";
+import "get_trigger_reply.proto";
+import "get_triggers_list_reply.proto";
+import "get_health_reply.proto";
+
+
 message Reply {
-    int32 version = 1 [default = 1];
-    bool error = 2 [default = false];
+    int32 version = 1;
+    bool error = 2;
 
     oneof reply {
         GenericOkReply generic_ok_reply = 7;

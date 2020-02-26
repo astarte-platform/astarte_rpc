@@ -6,9 +6,15 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## Unreleased
 
+## [0.11.0-rc.0] - 2020-02-26
+### Fixed
+- Make .proto files fully compliant with Protocol Buffers Version 3.
+
 ## [0.11.0-beta.2] - 2020-01-24
 
 ## [0.11.0-beta.1] - 2019-12-24
+### Added
+- Add `initial_introspection` to RegisterDevice.
 
 ## [0.10.2] - 2019-12-09
 ### Added

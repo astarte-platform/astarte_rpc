@@ -16,6 +16,8 @@
 // limitations under the License.
 //
 
+syntax = "proto3";
+
 message GenericErrorReply {
     string error_name = 1;
     string user_readable_error_name = 2;

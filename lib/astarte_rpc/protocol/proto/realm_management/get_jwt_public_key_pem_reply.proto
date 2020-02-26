@@ -16,6 +16,8 @@
 // limitations under the License.
 //
 
+syntax = "proto3";
+
 message GetJWTPublicKeyPEMReply {
     string jwt_public_key_pem = 1;
 }

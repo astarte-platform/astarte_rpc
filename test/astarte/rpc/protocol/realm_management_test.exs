@@ -39,7 +39,8 @@ defmodule Astarte.RPC.Protocol.RealmManagementTest do
     install_interface_call =
       Astarte.RPC.Protocol.RealmManagement.InstallInterface.new(
         realm_name: "test_realm",
-        interface_json: @test_interface_json
+        interface_json: @test_interface_json,
+        async_operation: false
       )
 
     version = 1

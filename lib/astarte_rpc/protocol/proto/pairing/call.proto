@@ -16,8 +16,17 @@
 // limitations under the License.
 //
 
+syntax = "proto3";
+
+import "get_credentials.proto";
+import "get_info.proto";
+import "get_agent_public_key_pems.proto";
+import "register_device.proto";
+import "verify_credentials.proto";
+import "unregister_device.proto";
+
 message Call {
-    int32 version = 1 [default = 1];
+    int32 version = 1;
 
     oneof call {
         GetAgentPublicKeyPEMs get_agent_public_key_pems = 6;

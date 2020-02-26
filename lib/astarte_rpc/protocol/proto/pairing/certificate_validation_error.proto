@@ -16,6 +16,8 @@
 // limitations under the License.
 //
 
+syntax = "proto3";
+
 enum CertificateValidationError {
     INVALID = 0;
     EXPIRED = 1;

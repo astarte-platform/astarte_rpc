@@ -20,7 +20,15 @@ defmodule Astarte.RPC.Protocol.HousekeepingTest do
   use ExUnit.Case
 
   test "Housekeeping Protobuf round trip" do
-    create_realm_call = Astarte.RPC.Protocol.Housekeeping.CreateRealm.new(realm: "testRealm")
+    create_realm_call =
+      Astarte.RPC.Protocol.Housekeeping.CreateRealm.new(
+        realm: "testRealm",
+        async_operation: false,
+        jwt_public_key_pem: "",
+        replication_class: :SIMPLE_STRATEGY,
+        replication_factor: 0
+      )
+
     version = 42
 
     rpc =

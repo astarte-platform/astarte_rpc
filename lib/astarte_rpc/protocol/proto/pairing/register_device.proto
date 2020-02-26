@@ -16,6 +16,10 @@
 // limitations under the License.
 //
 
+syntax = "proto3";
+
+import "introspection_entry.proto";
+
 message RegisterDevice {
     string hw_id = 1;
     string realm = 2;
