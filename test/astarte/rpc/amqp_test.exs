@@ -17,12 +17,13 @@
 #
 
 defmodule Astarte.RPC.AMQPTest do
+  alias Astarte.RPC.Config
   use ExUnit.Case
 
   @test_queue "test_server_rpc"
 
   setup_all do
-    amqp_options = Application.get_env(:astarte_rpc, :amqp_connection, [])
+    amqp_options = Config.amqp_options!()
     {:ok, conn} = AMQP.Connection.open(amqp_options)
     {:ok, chan} = AMQP.Channel.open(conn)
     AMQP.Queue.declare(chan, @test_queue)

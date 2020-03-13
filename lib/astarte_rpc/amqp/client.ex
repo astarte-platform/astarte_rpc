@@ -154,9 +154,9 @@ defmodule Astarte.RPC.AMQP.Client do
   end
 
   defp connect do
-    with {:ok, conn} <- AMQP.Connection.open(Config.amqp_options()),
+    with {:ok, conn} <- AMQP.Connection.open(Config.amqp_options!()),
          {:ok, chan} <- AMQP.Channel.open(conn),
-         :ok <- AMQP.Basic.qos(chan, prefetch_count: Config.amqp_prefetch_count()),
+         :ok <- AMQP.Basic.qos(chan, prefetch_count: Config.amqp_prefetch_count!()),
          {:ok, %{queue: reply_queue}} <-
            AMQP.Queue.declare(chan, "", exclusive: true, auto_delete: true),
          {:ok, _consumer_tag} <- AMQP.Basic.consume(chan, reply_queue, self(), no_ack: true),

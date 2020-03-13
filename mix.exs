@@ -71,8 +71,7 @@ defmodule Astarte.RPC.Mixfile do
     [
       {:amqp, "~> 1.2"},
       {:exprotobuf, "~> 1.2"},
-      {:distillery, "~> 1.5", runtime: false},
-      {:conform, "== 2.5.2"},
+      {:skogsra, "~> 2.2"},
       {:excoveralls, "~> 0.10", only: :test},
       {:dialyzex, github: "Comcast/dialyzex", only: [:dev, :ci]}
     ]
