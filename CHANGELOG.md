@@ -5,6 +5,15 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
+### Changed
+- Handle env variables with Skogsra
+- Change env variable ASTARTE_RPC_AMQP_CONNECTION_USERNAME into RPC_AMQP_CONNECTION_USERNAME
+- Change env variable ASTARTE_RPC_AMQP_CONNECTION_PASSWORD into RPC_AMQP_CONNECTION_PASSWORD
+- Change env variable ASTARTE_RPC_AMQP_CONNECTION_HOST into RPC_AMQP_CONNECTION_HOST
+- Change env variable ASTARTE_RPC_AMQP_CONNECTION_VIRTUAL_HOST into RPC_AMQP_CONNECTION_VIRTUAL_HOST
+- Change env variable ASTARTE_RPC_AMQP_CONNECTION_PORT into RPC_AMQP_CONNECTION_PORT
+- Change env variable ASTARTE_RPC_AMQP_PREFETCH_COUNT into RPC_AMQP_PREFETCH_COUNT
+- Change env variable ASTARTE_RPC_AMQP_QUEUE_MAX_LENGTH into RPC_AMQP_QUEUE_MAX_LENGTH
 
 ## [0.11.0-rc.0] - 2020-02-26
 ### Fixed

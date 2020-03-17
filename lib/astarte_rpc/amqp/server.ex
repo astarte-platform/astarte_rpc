@@ -133,11 +133,11 @@ defmodule Astarte.RPC.AMQP.Server do
   end
 
   defp connect(queue_name) do
-    with {:ok, conn} <- AMQP.Connection.open(Config.amqp_options()),
+    with {:ok, conn} <- AMQP.Connection.open(Config.amqp_options!()),
          {:ok, chan} <- AMQP.Channel.open(conn),
-         :ok <- AMQP.Basic.qos(chan, prefetch_count: Config.amqp_prefetch_count()),
+         :ok <- AMQP.Basic.qos(chan, prefetch_count: Config.amqp_prefetch_count!()),
          {:ok, _queue} <-
-           AMQP.Queue.declare(chan, queue_name, arguments: Config.amqp_queue_arguments()),
+           AMQP.Queue.declare(chan, queue_name, arguments: Config.amqp_queue_arguments!()),
          {:ok, _consumer_tag} <- AMQP.Basic.consume(chan, queue_name),
          # Get notifications when the chan or conn go down
          Process.monitor(chan.pid) do
