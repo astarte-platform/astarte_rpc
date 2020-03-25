@@ -69,12 +69,15 @@ defmodule Astarte.RPC.Mixfile do
   # Type "mix help deps" for more examples and options
   defp deps do
     [
-      {:amqp, "~> 1.2.1"},
-      {:exprotobuf, "~> 1.2"},
-      {:distillery, "~> 1.5", runtime: false},
+      {:amqp, "== 1.2.1"},
+      {:exprotobuf, "== 1.2.17"},
+      {:distillery, "== 1.5.5", runtime: false},
       {:conform, "== 2.5.2"},
-      {:excoveralls, "~> 0.10", only: :test},
-      {:dialyzex, github: "Comcast/dialyzex", only: [:dev, :ci]}
+      {:excoveralls, "== 0.11.1", only: :test},
+      {:dialyzex,
+       github: "Comcast/dialyzex",
+       ref: "cdc7cf71fe6df0ce4cf59e3f497579697a05c989",
+       only: [:dev, :ci]}
     ]
   end
 
