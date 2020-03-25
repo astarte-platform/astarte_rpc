@@ -70,6 +70,7 @@ defmodule Astarte.RPC.Mixfile do
   defp deps do
     [
       {:amqp, "== 1.2.1"},
+      {:ex_doc, ">= 0.0.0", only: :dev, runtime: false},
       {:exprotobuf, "== 1.2.17"},
       {:distillery, "== 1.5.5", runtime: false},
       {:conform, "== 2.5.2"},
