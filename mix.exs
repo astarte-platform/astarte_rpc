@@ -22,7 +22,7 @@ defmodule Astarte.RPC.Mixfile do
   def project do
     [
       app: :astarte_rpc,
-      version: "0.11.0-rc.1",
+      version: "0.11.0",
       elixir: "~> 1.8",
       build_embedded: Mix.env() == :prod,
       start_permanent: Mix.env() == :prod,
