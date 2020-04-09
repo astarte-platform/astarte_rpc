@@ -69,10 +69,10 @@ defmodule Astarte.RPC.Mixfile do
   # Type "mix help deps" for more examples and options
   defp deps do
     [
-      {:amqp, "~> 1.2"},
+      {:amqp, "~> 1.4"},
       {:exprotobuf, "~> 1.2"},
       {:skogsra, "~> 2.2"},
-      {:excoveralls, "~> 0.10", only: :test},
+      {:excoveralls, "~> 0.12", only: :test},
       {:dialyzex, github: "Comcast/dialyzex", only: [:dev, :ci]}
     ]
   end
