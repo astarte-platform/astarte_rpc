@@ -68,6 +68,32 @@ defmodule Astarte.RPC.Config do
     type: :integer,
     default: 0
 
+  @envdoc "Enable SSL. If not specified, SSL is disabled."
+  app_env :amqp_connection_ssl_enabled, :astarte_rpc, :amqp_connection_ssl_enabled,
+    os_env: "RPC_AMQP_CONNECTION_SSL_ENABLED",
+    type: :boolean,
+    default: false
+
+  @envdoc "Disable Server Name Indication. Defaults to false."
+  app_env :amqp_connection_ssl_disable_sni,
+          :astarte_rpc,
+          :amqp_connection_ssl_disable_sni,
+          os_env: "RPC_AMQP_CONNECTION_SSL_DISABLE_SNI",
+          type: :boolean,
+          default: false
+
+  @envdoc "Specify the hostname to be used in TLS Server Name Indication extension. If not specified, the amqp host will be used. This value is used only if Server Name Indication is enabled."
+  app_env :amqp_connection_ssl_custom_sni,
+          :astarte_appengine_api,
+          :amqp_connection_ssl_custom_sni,
+          os_env: "RPC_AMQP_CONNECTION_SSL_CUSTOM_SNI",
+          type: :binary
+
+  @envdoc "Specifies the certificates of the root Certificate Authorities to be trusted. When not specified, the bundled cURL certificate bundle will be used."
+  app_env :amqp_connection_ssl_ca_file, :astarte_rpc, :amqp_connection_ssl_ca_file,
+    os_env: "RPC_AMQP_CONNECTION_SSL_CA_FILE",
+    type: :binary
+
   @doc "The AMQP queue arguments."
   @type argument :: {:"x-max-length", integer()} | {:"x-overflow", String.t()}
   @spec amqp_queue_arguments!() :: [argument]
@@ -84,12 +110,19 @@ defmodule Astarte.RPC.Config do
   @doc """
   Returns the amqp_connection options or an empty list if they're not set.
   """
+  @type ssl_option ::
+          {:cacertfile, String.t()}
+          | {:verify, :verify_peer}
+          | {:server_name_indication, :disable | charlist()}
+  @type ssl_options :: :none | [ssl_option]
+
   @type options ::
           {:username, String.t()}
           | {:password, String.t()}
           | {:virtual_host, String.t()}
           | {:host, String.t()}
           | {:port, integer()}
+          | {:ssl_options, ssl_options}
 
   @spec amqp_options!() :: [options]
   def amqp_options! do
@@ -106,5 +139,32 @@ defmodule Astarte.RPC.Config do
       host: host,
       port: port
     ]
+    |> populate_ssl_options()
+  end
+
+  defp populate_ssl_options(options) do
+    if amqp_connection_ssl_enabled!() do
+      ssl_options = build_ssl_options()
+      Keyword.put(options, :ssl_options, ssl_options)
+    else
+      options
+    end
+  end
+
+  defp build_ssl_options() do
+    [
+      cacertfile: amqp_connection_ssl_ca_file!() || CAStore.file_path(),
+      verify: :verify_peer
+    ]
+    |> populate_sni()
+  end
+
+  defp populate_sni(ssl_options) do
+    if amqp_connection_ssl_disable_sni!() do
+      Keyword.put(ssl_options, :server_name_indication, :disable)
+    else
+      server_name = amqp_connection_ssl_custom_sni!() || amqp_connection_host!()
+      Keyword.put(ssl_options, :server_name_indication, to_charlist(server_name))
+    end
   end
 end
