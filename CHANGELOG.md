@@ -5,6 +5,9 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
+### Added
+- Add `PublishReply` to allow VerneMQ returning the number of matched clients after a publish.
+
 ### Changed
 - Handle env variables with Skogsra
 - Change env variable ASTARTE_RPC_AMQP_CONNECTION_USERNAME into RPC_AMQP_CONNECTION_USERNAME

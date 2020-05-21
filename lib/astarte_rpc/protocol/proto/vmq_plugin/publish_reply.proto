@@ -1,7 +1,7 @@
 //
 // This file is part of Astarte.
 //
-// Copyright 2017 Ispirata Srl
+// Copyright 2020 Ispirata Srl
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -18,17 +18,7 @@
 
 syntax = "proto3";
 
-import "generic_ok_reply.proto";
-import "generic_error_reply.proto";
-import "publish_reply.proto";
-
-message Reply {
-    int32 version = 1;
-    bool error = 2;
-
-    oneof reply {
-        GenericOkReply generic_ok_reply = 3;
-        GenericErrorReply generic_error_reply = 4;
-        PublishReply publish_reply = 5;
-    }
+message PublishReply {
+    int32 local_matches = 1;
+    int32 remote_matches = 2;
 }
