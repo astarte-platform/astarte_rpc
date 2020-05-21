@@ -15,6 +15,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Change env variable ASTARTE_RPC_AMQP_PREFETCH_COUNT into RPC_AMQP_PREFETCH_COUNT
 - Change env variable ASTARTE_RPC_AMQP_QUEUE_MAX_LENGTH into RPC_AMQP_QUEUE_MAX_LENGTH
 
+### Added
+- Support SSL connections to RabbitMQ.
+- Default max certificate chain length to 10.
+
 ## [0.11.0-rc.0] - 2020-02-26
 ### Fixed
 - Make .proto files fully compliant with Protocol Buffers Version 3.
