@@ -61,6 +61,7 @@ defmodule Astarte.RPC.Mixfile do
       {:skogsra, "~> 2.2"},
       {:excoveralls, "~> 0.12", only: :test},
       {:castore, "~> 0.1.0"},
+      {:ex_doc, ">= 0.0.0", only: :dev, runtime: false},
       {:dialyzex, github: "Comcast/dialyzex", only: [:dev, :ci]}
     ]
   end
