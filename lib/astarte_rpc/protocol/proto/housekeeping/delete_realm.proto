@@ -1,7 +1,7 @@
 //
 // This file is part of Astarte.
 //
-// Copyright 2017 Ispirata Srl
+// Copyright 2020 Ispirata Srl
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -18,23 +18,7 @@
 
 syntax = "proto3";
 
-import "create_realm.proto";
-import "does_realm_exist.proto";
-import "get_realms_list.proto";
-import "get_realm.proto";
-import "get_health.proto";
-import "delete_realm.proto";
-
-message Call {
-    int32 version = 1;
-
-    oneof call {
-        CreateRealm create_realm = 2;
-        DoesRealmExist does_realm_exist = 3;
-        GetRealmsList get_realms_list = 4;
-        GetRealm get_realm = 5;
-        GetHealth get_health = 6;
-        DeleteRealm delete_realm = 7;
-    }
+message DeleteRealm {
+    string realm = 1;
+    bool async_operation = 2;
 }
-
