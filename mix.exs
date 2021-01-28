@@ -22,7 +22,7 @@ defmodule Astarte.RPC.Mixfile do
   def project do
     [
       app: :astarte_rpc,
-      version: "1.0.0-dev",
+      version: "1.0.0-alpha.1",
       elixir: "~> 1.10",
       build_embedded: Mix.env() == :prod,
       start_permanent: Mix.env() == :prod,
@@ -60,7 +60,10 @@ defmodule Astarte.RPC.Mixfile do
       {:exprotobuf, "~> 1.2"},
       {:skogsra, "~> 2.2"},
       {:excoveralls, "~> 0.12", only: :test},
+      # Lock gpb to 4.12.0 until this is solved https://github.com/bitwalker/exprotobuf/issues/113
+      {:gpb, "~> 4.12.0"},
       {:castore, "~> 0.1.0"},
+      {:ex_doc, ">= 0.0.0", only: :dev, runtime: false},
       {:dialyzex, github: "Comcast/dialyzex", only: [:dev, :ci]}
     ]
   end
