@@ -58,7 +58,7 @@ jobs:
     strategy:
       matrix:
         rabbitmq:
-        - "rabbitmq:3.8.12-management"
+        - "rabbitmq:3.8.14-management"
     services:
       rabbitmq:
         image: ${{ matrix.rabbitmq }}
