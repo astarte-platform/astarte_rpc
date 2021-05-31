@@ -27,6 +27,8 @@ import "get_jwt_public_key_pem_reply.proto";
 import "get_trigger_reply.proto";
 import "get_triggers_list_reply.proto";
 import "get_health_reply.proto";
+import "get_trigger_policies_list_reply.proto";
+import "get_trigger_policy_source_reply.proto";
 
 
 message Reply {
@@ -43,5 +45,7 @@ message Reply {
         GetTriggerReply get_trigger_reply = 9;
         GetTriggersListReply get_triggers_list_reply = 10;
         GetHealthReply get_health_reply = 11;
+        GetTriggerPoliciesListReply get_trigger_policies_list_reply = 12;
+        GetTriggerPolicySourceReply get_trigger_policy_source_reply = 13;
     }
 }
