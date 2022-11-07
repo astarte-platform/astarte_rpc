@@ -31,6 +31,11 @@ import "get_trigger.proto";
 import "get_triggers_list.proto";
 import "delete_trigger.proto";
 import "get_health.proto";
+import "install_trigger_policy.proto";
+import "delete_trigger_policy.proto";
+import "get_trigger_policies_list.proto";
+import "get_trigger_policy_source.proto";
+
 
 message Call {
     int32 version = 1;
@@ -49,5 +54,9 @@ message Call {
         GetTriggersList get_triggers_list = 12;
         DeleteTrigger delete_trigger = 13;
         GetHealth get_health = 14;
+        InstallTriggerPolicy install_trigger_policy = 15;
+        DeleteTriggerPolicy delete_trigger_policy = 16;
+        GetTriggerPoliciesList get_trigger_policies_list = 17;
+        GetTriggerPolicySource get_trigger_policy_source = 18;
     }
 }
