@@ -51,4 +51,43 @@ defmodule Astarte.RPC.Protocol.PairingTest do
     assert(matched_reply == verify_credentials_reply)
     assert(matched_version == version)
   end
+
+  describe "payload serialized with ExProtobuf" do
+    alias Astarte.RPC.Protocol.Pairing.AstarteMQTTV1CredentialsStatus
+
+    test "still works for AstarteMQTTV1CredentialsStatus" do
+      serialized_payload =
+        <<8, 1, 16, 192, 228, 187, 244, 203, 3, 24, 177, 180, 240, 196, 133, 19, 32, 3, 42, 11,
+          78, 111, 116, 32, 116, 114, 117, 115, 116, 101, 100>>
+
+      astarte_credentials_status = %AstarteMQTTV1CredentialsStatus{
+        valid: true,
+        timestamp: 123_456_123_456,
+        until: 654_321_654_321,
+        cause: :INVALID_SIGNATURE,
+        details: "Not trusted"
+      }
+
+      assert AstarteMQTTV1CredentialsStatus.encode(astarte_credentials_status) ==
+               serialized_payload
+
+      assert AstarteMQTTV1CredentialsStatus.decode(serialized_payload) ==
+               astarte_credentials_status
+    end
+
+    test "is correctly deserialized even if zero-values are set on the wire" do
+      serialized_payload = <<8, 0, 16, 0, 24, 0, 32, 0, 42, 0>>
+
+      astarte_credentials_status = %AstarteMQTTV1CredentialsStatus{
+        valid: false,
+        timestamp: 0,
+        until: 0,
+        cause: :INVALID,
+        details: ""
+      }
+
+      assert AstarteMQTTV1CredentialsStatus.decode(serialized_payload) ==
+               astarte_credentials_status
+    end
+  end
 end
