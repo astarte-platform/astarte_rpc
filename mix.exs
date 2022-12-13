@@ -57,7 +57,7 @@ defmodule Astarte.RPC.Mixfile do
   defp deps do
     [
       {:amqp, "~> 2.1"},
-      {:exprotobuf, "~> 1.2"},
+      {:protobuf, github: "elixir-protobuf/protobuf"},
       {:skogsra, "~> 2.2"},
       {:excoveralls, "~> 0.15", only: :test},
       {:castore, "~> 0.1.0"},
