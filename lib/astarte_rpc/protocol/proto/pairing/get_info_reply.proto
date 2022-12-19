@@ -18,7 +18,7 @@
 
 syntax = "proto3";
 
-import "protocol_status.proto";
+import "lib/astarte_rpc/protocol/proto/pairing/protocol_status.proto";
 
 message GetInfoReply {
     string version = 1;

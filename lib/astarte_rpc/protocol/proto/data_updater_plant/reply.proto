@@ -18,8 +18,8 @@
 
 syntax = "proto3";
 
-import "generic_ok_reply.proto";
-import "generic_error_reply.proto";
+import "lib/astarte_rpc/protocol/proto/data_updater_plant/generic_ok_reply.proto";
+import "lib/astarte_rpc/protocol/proto/data_updater_plant/generic_error_reply.proto";
 
 message Reply {
     int32 version = 1;

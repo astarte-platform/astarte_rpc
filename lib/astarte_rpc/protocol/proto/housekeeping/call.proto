@@ -18,12 +18,12 @@
 
 syntax = "proto3";
 
-import "create_realm.proto";
-import "does_realm_exist.proto";
-import "get_realms_list.proto";
-import "get_realm.proto";
-import "get_health.proto";
-import "delete_realm.proto";
+import "lib/astarte_rpc/protocol/proto/housekeeping/create_realm.proto";
+import "lib/astarte_rpc/protocol/proto/housekeeping/does_realm_exist.proto";
+import "lib/astarte_rpc/protocol/proto/housekeeping/get_realms_list.proto";
+import "lib/astarte_rpc/protocol/proto/housekeeping/get_realm.proto";
+import "lib/astarte_rpc/protocol/proto/housekeeping/get_health.proto";
+import "lib/astarte_rpc/protocol/proto/housekeeping/delete_realm.proto";
 
 message Call {
     int32 version = 1;

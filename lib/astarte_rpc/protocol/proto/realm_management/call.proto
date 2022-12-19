@@ -18,23 +18,23 @@
 
 syntax = "proto3";
 
-import "install_interface.proto";
-import "update_interface.proto";
-import "delete_interface.proto";
-import "get_interface_source.proto";
-import "get_interface_versions_list.proto";
-import "get_interfaces_list.proto";
-import "get_jwt_public_key_pem.proto";
-import "update_jwt_public_key_pem.proto";
-import "install_trigger.proto";
-import "get_trigger.proto";
-import "get_triggers_list.proto";
-import "delete_trigger.proto";
-import "get_health.proto";
-import "install_trigger_policy.proto";
-import "delete_trigger_policy.proto";
-import "get_trigger_policies_list.proto";
-import "get_trigger_policy_source.proto";
+import "lib/astarte_rpc/protocol/proto/realm_management/install_interface.proto";
+import "lib/astarte_rpc/protocol/proto/realm_management/update_interface.proto";
+import "lib/astarte_rpc/protocol/proto/realm_management/delete_interface.proto";
+import "lib/astarte_rpc/protocol/proto/realm_management/get_interface_source.proto";
+import "lib/astarte_rpc/protocol/proto/realm_management/get_interface_versions_list.proto";
+import "lib/astarte_rpc/protocol/proto/realm_management/get_interfaces_list.proto";
+import "lib/astarte_rpc/protocol/proto/realm_management/get_jwt_public_key_pem.proto";
+import "lib/astarte_rpc/protocol/proto/realm_management/update_jwt_public_key_pem.proto";
+import "lib/astarte_rpc/protocol/proto/realm_management/install_trigger.proto";
+import "lib/astarte_rpc/protocol/proto/realm_management/get_trigger.proto";
+import "lib/astarte_rpc/protocol/proto/realm_management/get_triggers_list.proto";
+import "lib/astarte_rpc/protocol/proto/realm_management/delete_trigger.proto";
+import "lib/astarte_rpc/protocol/proto/realm_management/get_health.proto";
+import "lib/astarte_rpc/protocol/proto/realm_management/install_trigger_policy.proto";
+import "lib/astarte_rpc/protocol/proto/realm_management/delete_trigger_policy.proto";
+import "lib/astarte_rpc/protocol/proto/realm_management/get_trigger_policies_list.proto";
+import "lib/astarte_rpc/protocol/proto/realm_management/get_trigger_policy_source.proto";
 
 
 message Call {

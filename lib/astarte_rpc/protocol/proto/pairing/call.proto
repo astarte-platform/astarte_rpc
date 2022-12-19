@@ -18,12 +18,13 @@
 
 syntax = "proto3";
 
-import "get_credentials.proto";
-import "get_info.proto";
-import "get_agent_public_key_pems.proto";
-import "register_device.proto";
-import "verify_credentials.proto";
-import "unregister_device.proto";
+import "lib/astarte_rpc/protocol/proto/pairing/get_credentials.proto";
+import "lib/astarte_rpc/protocol/proto/pairing/get_health.proto";
+import "lib/astarte_rpc/protocol/proto/pairing/get_info.proto";
+import "lib/astarte_rpc/protocol/proto/pairing/get_agent_public_key_pems.proto";
+import "lib/astarte_rpc/protocol/proto/pairing/register_device.proto";
+import "lib/astarte_rpc/protocol/proto/pairing/verify_credentials.proto";
+import "lib/astarte_rpc/protocol/proto/pairing/unregister_device.proto";
 
 message Call {
     int32 version = 1;

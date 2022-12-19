@@ -18,7 +18,7 @@
 
 syntax = "proto3";
 
-import "replication_class.proto";
+import "lib/astarte_rpc/protocol/proto/housekeeping/replication_class.proto";
 
 message GetRealmReply {
     string realm_name = 1;
