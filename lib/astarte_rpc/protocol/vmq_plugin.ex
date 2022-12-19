@@ -17,8 +17,5 @@
 #
 
 defmodule Astarte.RPC.Protocol.VMQ.Plugin do
-  @external_resource Path.expand("proto/vmq_plugin", __DIR__)
-
-  use Protobuf, from: Path.wildcard(Path.expand("proto/vmq_plugin/*.proto", __DIR__))
   use Astarte.RPC.Protocol, amqp_queue: "vmq_plugin_rpc"
 end
