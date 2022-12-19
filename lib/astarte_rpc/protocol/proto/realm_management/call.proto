@@ -38,7 +38,7 @@ import "lib/astarte_rpc/protocol/proto/realm_management/get_trigger_policy_sourc
 
 
 message Call {
-    int32 version = 1;
+    int32 version = 1 [deprecated = true];
 
     oneof call {
         InstallInterface install_interface = 2;
