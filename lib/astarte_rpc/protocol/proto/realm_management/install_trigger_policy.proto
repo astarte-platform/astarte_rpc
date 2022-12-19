@@ -19,7 +19,7 @@
 syntax = "proto3";
 
 message InstallTriggerPolicy {
-    string realm_name = 1;
-    string trigger_policy_json = 2;
+    optional string realm_name = 1;
+    optional string trigger_policy_json = 2;
     bool async_operation = 3;
 }

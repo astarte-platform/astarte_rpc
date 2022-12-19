@@ -19,5 +19,5 @@
 syntax = "proto3";
 
 message GetInterfacesList {
-   string realm_name = 1;
+   optional string realm_name = 1;
 }

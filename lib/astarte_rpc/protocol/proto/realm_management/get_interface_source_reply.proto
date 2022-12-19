@@ -19,5 +19,5 @@
 syntax = "proto3";
 
 message GetInterfaceSourceReply {
-    string source = 1;
+    optional string source = 1;
 }

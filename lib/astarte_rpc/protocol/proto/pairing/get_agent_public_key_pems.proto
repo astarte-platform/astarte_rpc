@@ -19,5 +19,5 @@
 syntax = "proto3";
 
 message GetAgentPublicKeyPEMs  {
-    string realm = 1;
+    optional string realm = 1;
 }

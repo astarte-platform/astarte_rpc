@@ -19,6 +19,6 @@
 syntax = "proto3";
 
 message Disconnect {
-    string client_id = 1;
+    optional string client_id = 1;
     bool discard_state = 2;
 }
