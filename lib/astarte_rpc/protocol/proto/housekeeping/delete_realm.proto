@@ -19,6 +19,6 @@
 syntax = "proto3";
 
 message DeleteRealm {
-    string realm = 1;
+    optional string realm = 1;
     bool async_operation = 2;
 }

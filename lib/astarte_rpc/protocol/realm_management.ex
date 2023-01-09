@@ -17,8 +17,5 @@
 #
 
 defmodule Astarte.RPC.Protocol.RealmManagement do
-  @external_resource Path.expand("proto/realm_management", __DIR__)
-
-  use Protobuf, from: Path.wildcard(Path.expand("proto/realm_management/*.proto", __DIR__))
   use Astarte.RPC.Protocol, amqp_queue: "realm_management_rpc"
 end

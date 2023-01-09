@@ -18,11 +18,11 @@
 
 syntax = "proto3";
 
-import "replication_class.proto";
+import "lib/astarte_rpc/protocol/proto/housekeeping/replication_class.proto";
 
 message GetRealmReply {
-    string realm_name = 1;
-    string jwt_public_key_pem = 2;
+    optional string realm_name = 1;
+    optional string jwt_public_key_pem = 2;
     int32 replication_factor = 3;
     ReplicationClass replication_class = 4;
     map<string, int32> datacenter_replication_factors = 5;

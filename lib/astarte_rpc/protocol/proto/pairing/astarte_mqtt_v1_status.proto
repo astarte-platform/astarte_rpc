@@ -19,5 +19,5 @@
 syntax = "proto3";
 
 message AstarteMQTTV1Status {
-    string broker_url = 1;
+    optional string broker_url = 1;
 }

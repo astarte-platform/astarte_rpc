@@ -17,8 +17,5 @@
 #
 
 defmodule Astarte.RPC.Protocol.Pairing do
-  @external_resource Path.expand("proto/pairing", __DIR__)
-
-  use Protobuf, from: Path.wildcard(Path.expand("proto/pairing/*.proto", __DIR__))
   use Astarte.RPC.Protocol, amqp_queue: "pairing_rpc"
 end

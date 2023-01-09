@@ -19,7 +19,7 @@
 syntax = "proto3";
 
 message IntrospectionEntry {
-    string interface_name = 1;
+    optional string interface_name = 1;
     int32 major_version = 2;
     int32 minor_version = 3;
 }

@@ -20,6 +20,7 @@ syntax = "proto3";
 
 message GetHealthReply {
     enum Status {
+        INVALID = 0;
         READY = 1;
         DEGRADED = 2;
         BAD = 3;
