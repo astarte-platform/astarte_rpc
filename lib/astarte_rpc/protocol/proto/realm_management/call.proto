@@ -1,7 +1,7 @@
 //
 // This file is part of Astarte.
 //
-// Copyright 2017 Ispirata Srl
+// Copyright 2017 - 2023 SECO Mind Srl
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -35,6 +35,7 @@ import "lib/astarte_rpc/protocol/proto/realm_management/install_trigger_policy.p
 import "lib/astarte_rpc/protocol/proto/realm_management/delete_trigger_policy.proto";
 import "lib/astarte_rpc/protocol/proto/realm_management/get_trigger_policies_list.proto";
 import "lib/astarte_rpc/protocol/proto/realm_management/get_trigger_policy_source.proto";
+import "lib/astarte_rpc/protocol/proto/realm_management/delete_device.proto";
 
 
 message Call {
@@ -58,5 +59,6 @@ message Call {
         DeleteTriggerPolicy delete_trigger_policy = 16;
         GetTriggerPoliciesList get_trigger_policies_list = 17;
         GetTriggerPolicySource get_trigger_policy_source = 18;
+        DeleteDevice delete_device = 19;
     }
 }
