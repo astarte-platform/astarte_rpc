@@ -10,4 +10,5 @@ defmodule Astarte.RPC.Protocol.VMQ.Plugin.Call do
   field :version, 1, type: :int32, deprecated: true
   field :disconnect, 3, type: Astarte.RPC.Protocol.VMQ.Plugin.Disconnect, oneof: 0
   field :publish, 2, type: Astarte.RPC.Protocol.VMQ.Plugin.Publish, oneof: 0
+  field :delete, 4, type: Astarte.RPC.Protocol.VMQ.Plugin.Delete, oneof: 0
 end
