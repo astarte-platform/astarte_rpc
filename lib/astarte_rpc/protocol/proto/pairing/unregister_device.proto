@@ -19,6 +19,6 @@
 syntax = "proto3";
 
 message UnregisterDevice {
-    string realm = 1;
-    string device_id = 2;
+    optional string realm = 1;
+    optional string device_id = 2;
 }

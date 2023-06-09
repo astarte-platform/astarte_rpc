@@ -19,12 +19,12 @@
 syntax = "proto3";
 
 message InstallVolatileTrigger {
-    string realm_name = 1;
-    string device_id = 2;
-    bytes object_id = 3;
+    optional string realm_name = 1;
+    optional string device_id = 2;
+    optional bytes object_id = 3;
     int32 object_type = 4;
-    bytes parent_id = 5;
-    bytes simple_trigger_id = 8;
-    bytes simple_trigger = 6;
-    bytes trigger_target = 7;
+    optional bytes parent_id = 5;
+    optional bytes simple_trigger_id = 8;
+    optional bytes simple_trigger = 6;
+    optional bytes trigger_target = 7;
 }

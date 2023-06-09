@@ -18,11 +18,11 @@
 
 syntax = "proto3";
 
-import "disconnect.proto";
-import "publish.proto";
+import "lib/astarte_rpc/protocol/proto/vmq_plugin/disconnect.proto";
+import "lib/astarte_rpc/protocol/proto/vmq_plugin/publish.proto";
 
 message Call {
-    int32 version = 1;
+    int32 version = 1 [deprecated = true];
 
     oneof call {
         Disconnect disconnect = 3;

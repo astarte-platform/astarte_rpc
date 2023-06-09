@@ -18,12 +18,12 @@
 
 syntax = "proto3";
 
-import "replication_class.proto";
+import "lib/astarte_rpc/protocol/proto/housekeeping/replication_class.proto";
 
 message CreateRealm {
-    string realm = 1;
+    optional string realm = 1;
     bool async_operation = 2;
-    string jwt_public_key_pem = 3;
+    optional string jwt_public_key_pem = 3;
     int32 replication_factor = 4;
     ReplicationClass replication_class = 5;
     map<string, int32> datacenter_replication_factors = 6;

@@ -22,8 +22,8 @@ defmodule Astarte.RPC.Mixfile do
   def project do
     [
       app: :astarte_rpc,
-      version: "1.1.0-dev",
-      elixir: "~> 1.11",
+      version: "1.1.0-rc.0",
+      elixir: "~> 1.14",
       build_embedded: Mix.env() == :prod,
       start_permanent: Mix.env() == :prod,
       test_coverage: [tool: ExCoveralls],
@@ -57,11 +57,9 @@ defmodule Astarte.RPC.Mixfile do
   defp deps do
     [
       {:amqp, "~> 2.1"},
-      {:exprotobuf, "~> 1.2"},
+      {:protobuf, github: "elixir-protobuf/protobuf"},
       {:skogsra, "~> 2.2"},
-      {:excoveralls, "~> 0.12", only: :test},
-      # Lock gpb to 4.12.0 until this is solved https://github.com/bitwalker/exprotobuf/issues/113
-      {:gpb, "~> 4.12.0"},
+      {:excoveralls, "~> 0.15", only: :test},
       {:castore, "~> 0.1.0"},
       {:ex_doc, ">= 0.0.0", only: :dev, runtime: false},
       {:dialyzex, github: "Comcast/dialyzex", only: [:dev, :ci]}

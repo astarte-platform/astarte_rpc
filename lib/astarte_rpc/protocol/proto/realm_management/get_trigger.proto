@@ -19,6 +19,6 @@
 syntax = "proto3";
 
 message GetTrigger {
-    string realm_name = 1;
-    string trigger_name = 2;
+    optional string realm_name = 1;
+    optional string trigger_name = 2;
 }

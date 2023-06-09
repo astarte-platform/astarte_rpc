@@ -18,16 +18,17 @@
 
 syntax = "proto3";
 
-import "get_credentials_reply.proto";
-import "generic_ok_reply.proto";
-import "generic_error_reply.proto";
-import "get_info_reply.proto";
-import "get_agent_public_key_pems_reply.proto";
-import "register_device_reply.proto";
-import "verify_credentials_reply.proto";
+import "lib/astarte_rpc/protocol/proto/pairing/get_credentials_reply.proto";
+import "lib/astarte_rpc/protocol/proto/pairing/generic_ok_reply.proto";
+import "lib/astarte_rpc/protocol/proto/pairing/generic_error_reply.proto";
+import "lib/astarte_rpc/protocol/proto/pairing/get_health_reply.proto";
+import "lib/astarte_rpc/protocol/proto/pairing/get_info_reply.proto";
+import "lib/astarte_rpc/protocol/proto/pairing/get_agent_public_key_pems_reply.proto";
+import "lib/astarte_rpc/protocol/proto/pairing/register_device_reply.proto";
+import "lib/astarte_rpc/protocol/proto/pairing/verify_credentials_reply.proto";
 
 message Reply {
-    int32 version = 1;
+    int32 version = 1 [deprecated = true];
     bool error = 2;
 
     oneof reply {

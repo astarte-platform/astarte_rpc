@@ -19,7 +19,7 @@
 syntax = "proto3";
 
 message GetInfo {
-    string realm = 1;
-    string hw_id = 2;
-    string secret = 3;
+    optional string realm = 1;
+    optional string hw_id = 2;
+    optional string secret = 3;
 }

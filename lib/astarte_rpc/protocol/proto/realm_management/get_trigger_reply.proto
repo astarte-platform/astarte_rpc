@@ -19,7 +19,7 @@
 syntax = "proto3";
 
 message GetTriggerReply {
-    bytes trigger_data = 1;
+    optional bytes trigger_data = 1;
 
     repeated bytes serialized_tagged_simple_triggers = 2;
 }

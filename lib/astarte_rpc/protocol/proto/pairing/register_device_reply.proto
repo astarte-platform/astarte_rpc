@@ -19,5 +19,5 @@
 syntax = "proto3";
 
 message RegisterDeviceReply {
-    string credentials_secret = 1;
+    optional string credentials_secret = 1;
 }
