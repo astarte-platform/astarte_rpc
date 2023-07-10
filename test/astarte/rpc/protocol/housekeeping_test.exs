@@ -1,7 +1,7 @@
 #
 # This file is part of Astarte.
 #
-# Copyright 2017 Ispirata Srl
+# Copyright 2017-2023 SECO Mind Srl
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -84,6 +84,73 @@ defmodule Astarte.RPC.Protocol.HousekeepingTest do
         )
 
       assert CreateRealm.decode(serialized_payload) == create_realm_call
+    end
+  end
+
+  test "GetRealmReply payload is correctly serialized when no device_registration_limit is set" do
+    get_realm_reply =
+      Astarte.RPC.Protocol.Housekeeping.GetRealmReply.new(
+        realm_name: "testRealm",
+        jwt_public_key_pem: "",
+        replication_class: :SIMPLE_STRATEGY,
+        replication_factor: 0
+      )
+
+    encoded = Astarte.RPC.Protocol.Housekeeping.GetRealmReply.encode(get_realm_reply)
+
+    assert %Astarte.RPC.Protocol.Housekeeping.GetRealmReply{
+             realm_name: "testRealm",
+             jwt_public_key_pem: "",
+             replication_class: :SIMPLE_STRATEGY,
+             replication_factor: 0,
+             device_registration_limit: nil
+           } = Astarte.RPC.Protocol.Housekeeping.GetRealmReply.decode(encoded)
+  end
+
+  describe "UpdateRealm" do
+    alias Astarte.RPC.Protocol.Housekeeping.UpdateRealm
+    alias Astarte.RPC.Protocol.Housekeeping.SetLimit
+    alias Astarte.RPC.Protocol.Housekeeping.RemoveLimit
+
+    test "is correctly serialized when device_registration_limit is set" do
+      update_realm = %UpdateRealm{
+        realm: "testRealm",
+        device_registration_limit: {:set_limit, %SetLimit{value: 1}}
+      }
+
+      encoded = UpdateRealm.encode(update_realm)
+
+      assert %UpdateRealm{
+               realm: "testRealm",
+               device_registration_limit: {:set_limit, %SetLimit{value: 1}}
+             } = UpdateRealm.decode(encoded)
+    end
+
+    test "is correctly serialized when device_registration_limit is missing" do
+      update_realm = %UpdateRealm{
+        realm: "testRealm"
+      }
+
+      encoded = UpdateRealm.encode(update_realm)
+
+      assert %UpdateRealm{
+               realm: "testRealm",
+               device_registration_limit: nil
+             } = UpdateRealm.decode(encoded)
+    end
+
+    test "is correctly serialized when device_registration_limit is removed" do
+      update_realm = %UpdateRealm{
+        realm: "testRealm",
+        device_registration_limit: {:remove_limit, %RemoveLimit{}}
+      }
+
+      encoded = UpdateRealm.encode(update_realm)
+
+      assert %UpdateRealm{
+               realm: "testRealm",
+               device_registration_limit: {:remove_limit, %RemoveLimit{}}
+             } = UpdateRealm.decode(encoded)
     end
   end
 end

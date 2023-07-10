@@ -30,4 +30,9 @@ defmodule Astarte.RPC.Protocol.Housekeeping.GetRealmReply do
     type: Astarte.RPC.Protocol.Housekeeping.GetRealmReply.DatacenterReplicationFactorsEntry,
     json_name: "datacenterReplicationFactors",
     map: true
+
+  field :device_registration_limit, 6,
+    proto3_optional: true,
+    type: :int64,
+    json_name: "deviceRegistrationLimit"
 end
