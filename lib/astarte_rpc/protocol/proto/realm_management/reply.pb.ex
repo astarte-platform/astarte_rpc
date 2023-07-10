@@ -64,4 +64,9 @@ defmodule Astarte.RPC.Protocol.RealmManagement.Reply do
     type: Astarte.RPC.Protocol.RealmManagement.GetTriggerPolicySourceReply,
     json_name: "getTriggerPolicySourceReply",
     oneof: 0
+
+  field :get_device_registration_limit_reply, 14,
+    type: Astarte.RPC.Protocol.RealmManagement.GetDeviceRegistrationLimitReply,
+    json_name: "getDeviceRegistrationLimitReply",
+    oneof: 0
 end

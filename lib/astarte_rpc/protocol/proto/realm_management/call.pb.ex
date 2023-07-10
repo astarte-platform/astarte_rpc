@@ -98,4 +98,9 @@ defmodule Astarte.RPC.Protocol.RealmManagement.Call do
     type: Astarte.RPC.Protocol.RealmManagement.DeleteDevice,
     json_name: "deleteDevice",
     oneof: 0
+
+  field :get_device_registration_limit, 20,
+    type: Astarte.RPC.Protocol.RealmManagement.GetDeviceRegistrationLimit,
+    json_name: "getDeviceRegistrationLimit",
+    oneof: 0
 end
