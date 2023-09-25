@@ -93,4 +93,9 @@ defmodule Astarte.RPC.Protocol.RealmManagement.Call do
     type: Astarte.RPC.Protocol.RealmManagement.GetTriggerPolicySource,
     json_name: "getTriggerPolicySource",
     oneof: 0
+
+  field :delete_device, 19,
+    type: Astarte.RPC.Protocol.RealmManagement.DeleteDevice,
+    json_name: "deleteDevice",
+    oneof: 0
 end
