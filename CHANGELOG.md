@@ -14,6 +14,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
 - Add support for trigger delivery policy.
 
+## [1.0.5] - 2023-09-25
+
 ## [1.0.4] - 2022-09-26
 
 ## [1.0.3] - 2022-07-04
