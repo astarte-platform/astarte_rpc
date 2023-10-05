@@ -38,4 +38,9 @@ defmodule Astarte.RPC.Protocol.Housekeeping.Call do
     type: Astarte.RPC.Protocol.Housekeeping.DeleteRealm,
     json_name: "deleteRealm",
     oneof: 0
+
+  field :update_realm, 8,
+    type: Astarte.RPC.Protocol.Housekeeping.UpdateRealm,
+    json_name: "updateRealm",
+    oneof: 0
 end
