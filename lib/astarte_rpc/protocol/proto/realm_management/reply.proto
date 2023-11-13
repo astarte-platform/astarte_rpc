@@ -29,6 +29,7 @@ import "lib/astarte_rpc/protocol/proto/realm_management/get_triggers_list_reply.
 import "lib/astarte_rpc/protocol/proto/realm_management/get_health_reply.proto";
 import "lib/astarte_rpc/protocol/proto/realm_management/get_trigger_policies_list_reply.proto";
 import "lib/astarte_rpc/protocol/proto/realm_management/get_trigger_policy_source_reply.proto";
+import "lib/astarte_rpc/protocol/proto/realm_management/get_device_registration_limit_reply.proto";
 
 
 message Reply {
@@ -47,5 +48,6 @@ message Reply {
         GetHealthReply get_health_reply = 11;
         GetTriggerPoliciesListReply get_trigger_policies_list_reply = 12;
         GetTriggerPolicySourceReply get_trigger_policy_source_reply = 13;
+        GetDeviceRegistrationLimitReply get_device_registration_limit_reply = 14;
     }
 }

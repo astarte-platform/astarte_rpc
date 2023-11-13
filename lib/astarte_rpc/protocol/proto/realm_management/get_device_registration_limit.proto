@@ -18,22 +18,6 @@
 
 syntax = "proto3";
 
-import "lib/astarte_rpc/protocol/proto/housekeeping/replication_class.proto";
-
-message RemoveLimit {}
-
-message SetLimit {
-    int64 value = 1;
-}
-
-message UpdateRealm {
-    optional string realm = 1;
-    optional string jwt_public_key_pem = 3;
-    optional int32 replication_factor = 4;
-    optional ReplicationClass replication_class = 5;
-    map<string, int32> datacenter_replication_factors = 6;
-    oneof device_registration_limit {
-        SetLimit set_limit = 7;
-        RemoveLimit remove_limit= 8;
-    }
+message GetDeviceRegistrationLimit {
+    optional string realm_name = 1;
 }

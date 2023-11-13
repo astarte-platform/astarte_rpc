@@ -1,7 +1,7 @@
 //
 // This file is part of Astarte.
 //
-// Copyright 2017 Ispirata Srl
+// Copyright 2017-2023 SECO Mind Srl
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -26,4 +26,5 @@ message GetRealmReply {
     int32 replication_factor = 3;
     ReplicationClass replication_class = 4;
     map<string, int32> datacenter_replication_factors = 5;
+    optional int64 device_registration_limit = 6;
 }
