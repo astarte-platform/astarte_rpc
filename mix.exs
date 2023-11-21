@@ -35,7 +35,7 @@ defmodule Astarte.RPC.Mixfile do
       ],
       description: description(),
       package: package(),
-      dialyzer_cache_directory: dialyzer_cache_directory(Mix.env()),
+      dialyzer: [plt_core_path: dialyzer_cache_directory(Mix.env())],
       deps: deps(),
       source_url: "https://github.com/astarte-platform/astarte_rpc",
       homepage_url: "https://astarte-platform.org/"
@@ -62,7 +62,7 @@ defmodule Astarte.RPC.Mixfile do
       {:excoveralls, "~> 0.15", only: :test},
       {:castore, "~> 0.1.0"},
       {:ex_doc, ">= 0.0.0", only: :dev, runtime: false},
-      {:dialyzex, github: "Comcast/dialyzex", only: [:dev, :ci]}
+      {:dialyxir, "~> 1.4", only: [:dev, :ci], runtime: false}
     ]
   end
 
