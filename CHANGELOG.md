@@ -13,6 +13,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Add `GetDeviceRegistrationLimit[Reply]` to retrieve the maximum
   number of registered devices per realm.
 
+## [1.1.1] - 2023-10-03
+
 ## [1.1.0] - 2023-06-20
 
 ## [1.1.0-rc.0] - 2023-06-08
@@ -22,6 +24,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [1.1.0-alpha.0] - 2022-11-14
 ### Added
 - Add support for trigger delivery policy.
+
+## [1.0.5] - 2023-09-25
 
 ## [1.0.4] - 2022-09-26
 
