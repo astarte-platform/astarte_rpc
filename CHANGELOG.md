@@ -13,6 +13,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Add `GetDeviceRegistrationLimit[Reply]` to retrieve the maximum
   number of registered devices per realm.
 
+### Changed
+- Bump Elixir to 1.15.7.
+
 ## [1.1.1] - 2023-10-03
 
 ## [1.1.0] - 2023-06-20
