@@ -43,7 +43,7 @@ defmodule Astarte.RPC.Mixfile do
   end
 
   def application do
-    [extra_applications: [:lager, :logger, :amqp]]
+    [extra_applications: [:logger]]
   end
 
   defp dialyzer_cache_directory(:ci) do
@@ -56,7 +56,7 @@ defmodule Astarte.RPC.Mixfile do
 
   defp deps do
     [
-      {:amqp, "~> 2.1"},
+      {:amqp, "~> 3.3"},
       {:protobuf, "~> 0.12"},
       {:skogsra, "~> 2.2"},
       {:excoveralls, "~> 0.15", only: :test},
