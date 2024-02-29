@@ -69,4 +69,9 @@ defmodule Astarte.RPC.Protocol.RealmManagement.Reply do
     type: Astarte.RPC.Protocol.RealmManagement.GetDeviceRegistrationLimitReply,
     json_name: "getDeviceRegistrationLimitReply",
     oneof: 0
+
+  field :get_datastream_maximum_storage_retention_reply, 15,
+    type: Astarte.RPC.Protocol.RealmManagement.GetDatastreamMaximumStorageRetentionReply,
+    json_name: "getDatastreamMaximumStorageRetentionReply",
+    oneof: 0
 end
