@@ -1,9 +1,7 @@
 defmodule Astarte.RPC.Protocol.Housekeeping.CreateRealm.DatacenterReplicationFactorsEntry do
   @moduledoc false
 
-  use Protobuf, map: true, protoc_gen_elixir_version: "0.11.0", syntax: :proto3
-
-  def fully_qualified_name, do: "CreateRealm.DatacenterReplicationFactorsEntry"
+  use Protobuf, map: true, syntax: :proto3, protoc_gen_elixir_version: "0.12.0"
 
   field :key, 1, type: :string
   field :value, 2, type: :int32
@@ -12,9 +10,7 @@ end
 defmodule Astarte.RPC.Protocol.Housekeeping.CreateRealm do
   @moduledoc false
 
-  use Protobuf, protoc_gen_elixir_version: "0.11.0", syntax: :proto3
-
-  def fully_qualified_name, do: "CreateRealm"
+  use Protobuf, syntax: :proto3, protoc_gen_elixir_version: "0.12.0"
 
   field :realm, 1, proto3_optional: true, type: :string
   field :async_operation, 2, type: :bool, json_name: "asyncOperation"
@@ -36,4 +32,8 @@ defmodule Astarte.RPC.Protocol.Housekeeping.CreateRealm do
     proto3_optional: true,
     type: :int64,
     json_name: "deviceRegistrationLimit"
+
+  field :datastream_maximum_storage_retention, 8,
+    type: :int64,
+    json_name: "datastreamMaximumStorageRetention"
 end

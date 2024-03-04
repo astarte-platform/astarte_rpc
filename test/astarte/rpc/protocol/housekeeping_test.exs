@@ -103,7 +103,8 @@ defmodule Astarte.RPC.Protocol.HousekeepingTest do
              jwt_public_key_pem: "",
              replication_class: :SIMPLE_STRATEGY,
              replication_factor: 0,
-             device_registration_limit: nil
+             device_registration_limit: nil,
+             datastream_maximum_storage_retention: 0
            } = Astarte.RPC.Protocol.Housekeeping.GetRealmReply.decode(encoded)
   end
 
@@ -150,6 +151,47 @@ defmodule Astarte.RPC.Protocol.HousekeepingTest do
       assert %UpdateRealm{
                realm: "testRealm",
                device_registration_limit: {:remove_limit, %RemoveLimit{}}
+             } = UpdateRealm.decode(encoded)
+    end
+
+    test "is correctly serialized when datastream_maximum_storage_retention is set" do
+      update_realm = %UpdateRealm{
+        realm: "testRealm",
+        datastream_maximum_storage_retention: 1
+      }
+
+      encoded = UpdateRealm.encode(update_realm)
+
+      assert %UpdateRealm{
+               realm: "testRealm",
+               datastream_maximum_storage_retention: 1
+             } = UpdateRealm.decode(encoded)
+    end
+
+    test "is correctly serialized when datastream_maximum_storage_retention is missing" do
+      update_realm = %UpdateRealm{
+        realm: "testRealm"
+      }
+
+      encoded = UpdateRealm.encode(update_realm)
+
+      assert %UpdateRealm{
+               realm: "testRealm",
+               datastream_maximum_storage_retention: nil
+             } = UpdateRealm.decode(encoded)
+    end
+
+    test "is correctly serialized when datastream_maximum_storage_retention is removed (set to 0 value)" do
+      update_realm = %UpdateRealm{
+        realm: "testRealm",
+        datastream_maximum_storage_retention: 0
+      }
+
+      encoded = UpdateRealm.encode(update_realm)
+
+      assert %UpdateRealm{
+               realm: "testRealm",
+               datastream_maximum_storage_retention: 0
              } = UpdateRealm.decode(encoded)
     end
   end

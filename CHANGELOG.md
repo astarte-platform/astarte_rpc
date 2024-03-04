@@ -10,6 +10,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Add support to realm update.
 - Add `device_registration_limit` field to `CreateRealm`, `GetRealmReply`
   and `UpdateRealm`.
+- Add `datastream_maximum_storage_retention` field to `CreateRealm`,
+  `GetRealmReply` and `UpdateRealm`.
 - Add `GetDeviceRegistrationLimit[Reply]` to retrieve the maximum
   number of registered devices per realm.
 
