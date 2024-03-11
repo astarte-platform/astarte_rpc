@@ -1,13 +1,13 @@
 defmodule Astarte.RPC.Protocol.Housekeeping.RemoveLimit do
   @moduledoc false
 
-  use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
+  use Protobuf, syntax: :proto3, protoc_gen_elixir_version: "0.12.0"
 end
 
 defmodule Astarte.RPC.Protocol.Housekeeping.SetLimit do
   @moduledoc false
 
-  use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
+  use Protobuf, syntax: :proto3, protoc_gen_elixir_version: "0.12.0"
 
   field :value, 1, type: :int64
 end
@@ -15,7 +15,7 @@ end
 defmodule Astarte.RPC.Protocol.Housekeeping.UpdateRealm.DatacenterReplicationFactorsEntry do
   @moduledoc false
 
-  use Protobuf, map: true, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
+  use Protobuf, map: true, syntax: :proto3, protoc_gen_elixir_version: "0.12.0"
 
   field :key, 1, type: :string
   field :value, 2, type: :int32
@@ -24,7 +24,7 @@ end
 defmodule Astarte.RPC.Protocol.Housekeeping.UpdateRealm do
   @moduledoc false
 
-  use Protobuf, protoc_gen_elixir_version: "0.12.0", syntax: :proto3
+  use Protobuf, syntax: :proto3, protoc_gen_elixir_version: "0.12.0"
 
   oneof :device_registration_limit, 0
 
@@ -57,4 +57,9 @@ defmodule Astarte.RPC.Protocol.Housekeeping.UpdateRealm do
     type: Astarte.RPC.Protocol.Housekeeping.RemoveLimit,
     json_name: "removeLimit",
     oneof: 0
+
+  field :datastream_maximum_storage_retention, 9,
+    proto3_optional: true,
+    type: :int64,
+    json_name: "datastreamMaximumStorageRetention"
 end

@@ -1,7 +1,7 @@
 //
 // This file is part of Astarte.
 //
-// Copyright 2017-2024 SECO Mind Srl
+// Copyright 2024 SECO Mind Srl
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -18,15 +18,6 @@
 
 syntax = "proto3";
 
-import "lib/astarte_rpc/protocol/proto/housekeeping/replication_class.proto";
-
-message CreateRealm {
-    optional string realm = 1;
-    bool async_operation = 2;
-    optional string jwt_public_key_pem = 3;
-    int32 replication_factor = 4;
-    ReplicationClass replication_class = 5;
-    map<string, int32> datacenter_replication_factors = 6;
-    optional int64 device_registration_limit = 7;
-    int64 datastream_maximum_storage_retention = 8;
+message GetDatastreamMaximumStorageRetentionReply {
+    int64 datastream_maximum_storage_retention = 1;
 }
