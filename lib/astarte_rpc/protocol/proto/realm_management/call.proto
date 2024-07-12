@@ -38,6 +38,7 @@ import "lib/astarte_rpc/protocol/proto/realm_management/get_trigger_policy_sourc
 import "lib/astarte_rpc/protocol/proto/realm_management/delete_device.proto";
 import "lib/astarte_rpc/protocol/proto/realm_management/get_device_registration_limit.proto";
 import "lib/astarte_rpc/protocol/proto/realm_management/get_datastream_maximum_storage_retention.proto";
+import "lib/astarte_rpc/protocol/proto/realm_management/get_detailed_interfaces_list.proto";
 
 
 message Call {
@@ -64,5 +65,6 @@ message Call {
         DeleteDevice delete_device = 19;
         GetDeviceRegistrationLimit get_device_registration_limit = 20;
         GetDatastreamMaximumStorageRetention get_datastream_maximum_storage_retention = 21;
+        GetDetailedInterfacesList get_detailed_interfaces_list = 22;
     }
 }

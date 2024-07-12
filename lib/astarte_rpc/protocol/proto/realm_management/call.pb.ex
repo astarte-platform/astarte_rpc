@@ -108,4 +108,9 @@ defmodule Astarte.RPC.Protocol.RealmManagement.Call do
     type: Astarte.RPC.Protocol.RealmManagement.GetDatastreamMaximumStorageRetention,
     json_name: "getDatastreamMaximumStorageRetention",
     oneof: 0
+
+  field :get_detailed_interfaces_list, 22,
+    type: Astarte.RPC.Protocol.RealmManagement.GetDetailedInterfacesList,
+    json_name: "getDetailedInterfacesList",
+    oneof: 0
 end
