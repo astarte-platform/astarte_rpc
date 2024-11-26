@@ -56,7 +56,7 @@ defmodule Astarte.RPC.Mixfile do
 
   defp deps do
     [
-      {:amqp, "~> 3.3"},
+      {:amqp, "~> 4.0"},
       {:protobuf, "~> 0.12"},
       {:skogsra, "~> 2.2"},
       {:excoveralls, "~> 0.15", only: :test},
